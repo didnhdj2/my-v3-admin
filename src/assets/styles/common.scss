@@ -1,0 +1,414 @@
+// pc端公共样式
+/*
+1、line-num （1-5）：文字显示行数，超过后用...省略
+2、poiter：鼠标移动到元素上时，显示手型
+3、box-s：设置盒子模型为border-box
+4、color-：red 红色 black 黑色 white 白色  灰色 cc 33 66 99 4d
+5、bg-：black 黑色 white 白色  灰色 cc 33 66 99 4d
+6、fr：direction：row(默认)   fc column 纵向排列  fw 换行
+7、f-：侧轴 ac   ae   主轴 jc je jsb jsa  侧轴-主轴 ac-jc ac-je ac-jsb -ac-jsa  (as js是默认值)  1-8 flex:1-8
+8、as-: align-self: auto | flex-start | flex-end | center | baseline | stretch;
+9、text- ： text-align: l left | r  right | c  center |j justify;
+10、line/line-dark/td-lt/un-line  浅色线条 、深色线条、删除线、下划线
+11、fs- 10-32  font-size: 10px-32px
+12、fw- 300-800  font-weight: 300 -800  fw-b bold
+13、lh- 12-40  line-height:  12-40 px
+14、fs- 10-32  font-size:  10px-32px
+15、pt- pb- pl- pr-  plr- ptb- :2-100 padding: 2-100px
+16、mt- mb- ml- mr-  mlr- mtb- :2-100 margin: 2-100px
+17、h- w- :2-100  height/width: 2-100
+18、scroll- y overflow-y: scroll; -x overflow-x: scroll;
+19、br- num圆角  b-num底部圆角  t-num 顶部圆角  6-32
+*/
+
+
+@for $index from 1 through 5 {
+  .line-#{$index} {
+    -webkit-line-clamp: #{$index};
+    overflow: hidden;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box; // 弹性伸缩盒
+    -webkit-box-orient: vertical; // 设置伸缩盒子元素排列方式
+  }
+}
+
+.poiter {
+  cursor: pointer;
+}
+
+.box-s {
+  box-sizing: border-box;
+}
+
+$color-list: red #F50537, black #000000, cc #cccccc, 33 #333333, 66 #666666, 99 #999999, 4d #4d4d4d,
+  white #ffffff, 80 #808080, 3c #3c8dbc, ea #eaedf1;
+
+// color
+@each $n ,
+$c in $color-list {
+  .color {
+    &-#{"" + $n} {
+      color: #{$c};
+    }
+  }
+
+  .bg {
+    &-#{"" + $n} {
+      background-color: #{$c};
+    }
+  }
+}
+
+.fr {
+  display: flex;
+  flex-direction: row !important;
+}
+
+.frr {
+  display: flex;
+  flex-direction: row-reverse !important;
+}
+
+.fc {
+  display: flex;
+  flex-direction: column !important;
+}
+
+.fcr {
+  display: flex;
+  flex-direction: column-reverse !important;
+}
+
+.fw {
+  flex-wrap: wrap;
+}
+
+// flex
+.f {
+
+  &-ac {
+    align-items: center;
+  }
+
+  &-as {
+    align-items: flex-start;
+  }
+
+
+  &-ae {
+    align-items: flex-end;
+  }
+
+  &-js {
+    justify-content: flex-start;
+  }
+
+  &-jc {
+    justify-content: center;
+  }
+
+  &-je {
+    justify-content: flex-end;
+  }
+
+  &-jsb {
+    justify-content: space-between;
+  }
+
+  &-jsa {
+    justify-content: space-around;
+  }
+
+  &-ac-jc {
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-ac-je {
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  &-ac-jsb {
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &-ac-jsa {
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  @for $size from 1 to 8 {
+    &-#{$size} {
+      flex: $size;
+    }
+  }
+}
+
+//二、元素
+//align-self: auto | flex-start | flex-end | center | baseline | stretch;
+$dire: s flex-start, e flex-end, c center, b baseline, st stretch;
+
+.as {
+
+  @each $short,
+  $long in $dire {
+    &-#{short} {
+      align-self: #{$long};
+    }
+  }
+}
+
+//文本对齐方式
+.text {
+
+  &-l {
+    text-align: left;
+  }
+
+  &-c {
+    text-align: center;
+  }
+
+  &-r {
+    text-align: right;
+  }
+
+  //文本两端对齐
+  &-j {
+    text-align: justify;
+    text-align-last: justify;
+  }
+}
+
+// 深灰色的线条
+.line-dark {
+  border-bottom: 2px solid #797B89;
+  width: 100%;
+  height: 2px;
+}
+
+// 浅灰色的线条
+.line {
+  border-bottom: 2px solid #CDCDCD;
+  width: 100%;
+  height: 2px;
+}
+
+//删除线
+.td-lt {
+  text-decoration: line-through;
+}
+
+.un-line {
+  text-decoration: underline;
+}
+
+//文本加粗
+.fw-b {
+  font-weight: bold;
+}
+
+@for $size from 10 through 32 {
+  .fs-#{$size } {
+    font-size: #{$size }px;
+  }
+}
+
+@for $size from 3 through 8 {
+  .fw-#{$size * 100} {
+    font-weight: $size * 100;
+  }
+}
+
+@for $size from 12 through 60 {
+  .lh-#{$size  } {
+    line-height: #{$size  }px;
+  }
+}
+
+// 内外边距 4-200px
+@for $var from 2 through 200 {
+
+  @each $short,
+  $long in l left,
+  t top,
+  r right,
+  b bottom {
+    .p {
+      &#{$short}-#{$var} {
+        padding-#{$long}:#{$var}px;
+      }
+    }
+
+    .m {
+      &#{$short}-#{$var} {
+        margin-#{$long}:#{$var}px;
+      }
+    }
+  }
+
+  .ptb-#{$var} {
+    padding-top:#{$var}px;
+    padding-bottom:#{$var}px;
+  }
+
+  .plr-#{$var} {
+    padding-left:#{$var}px;
+    padding-right:#{$var}px;
+  }
+
+  .mlr-#{$var} {
+    margin-right:#{$var}px;
+    margin-left:#{$var}px;
+  }
+
+  .mtb-#{$var} {
+    margin-top:#{$var}px;
+    margin-bottom:#{$var}px;
+  }
+
+  .h-#{$var} {
+    height:#{$var}px;
+  }
+
+  .w-#{$var} {
+    width:#{$var}px;
+  }
+}
+
+.scroll-y {
+  overflow-y: scroll;
+}
+
+.scroll-x {
+  overflow-x: scroll;
+}
+
+@for $rad from 6 through 32 {
+
+  .br-#{$rad} {
+    border-radius: #{$rad}px;
+  }
+
+  .br-t-#{$rad} {
+    border-top-left-radius:#{$rad}px;
+    border-top-right-radius:#{$rad}px;
+  }
+
+  .br-b-#{$rad} {
+    border-bottom-left-radius:#{$rad}px;
+    border-bottom-right-radius:#{$rad}px;
+  }
+}
+
+.bb {
+  border-bottom: 1px solid #eee;
+}
+
+.bl {
+  border-left: 1px solid #eee;
+}
+
+.w {
+  &_100 {
+    width: 100%;
+  }
+
+  &_50 {
+    width: 50%;
+  }
+
+  &_33 {
+    width: 33.333333%;
+  }
+
+  &_25 {
+    width: 25%;
+  }
+
+  &_20 {
+    width: 20%;
+  }
+
+  &_10 {
+    width: 10%;
+  }
+}
+
+.pos {
+  &-r {
+    position: relative !important;
+  }
+
+  &-a {
+    position: absolute !important;
+  }
+
+  &-f {
+    position: fixed !important;
+  }
+}
+
+.top {
+  &_0 {
+    top: 0;
+  }
+
+  &_50 {
+    top: 50%;
+  }
+
+  &_-50 {
+    top: -50%;
+  }
+}
+
+.right {
+  &_0 {
+    right: 0;
+  }
+
+  &_50 {
+    right: 50%;
+  }
+
+  &_-50 {
+    right: -50%;
+  }
+
+  &_-10 {
+    right: -10px;
+  }
+
+}
+
+.left {
+  &_0 {
+    left: 0;
+  }
+
+  &_50 {
+    left: 50%;
+  }
+
+  &_-50 {
+    left: -50%;
+  }
+}
+
+.bottom {
+  &_0 {
+    bottom: 0;
+  }
+
+  &_50 {
+    bottom: 50%;
+  }
+
+  &_-50 {
+    bottom: -50%;
+  }
+}
