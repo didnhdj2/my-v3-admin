@@ -13,19 +13,18 @@
               <el-form-item v-if="!item.isHidden" v-bind="item.itemsAttr" :prop="item.field">
                 <template v-if="['input', 'password', 'text', 'textarea'].includes(item.type)">
                   <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-input v-model="formData[`${item.field}`]" :type="item.type" v-bind="item.slotAttr" :disabled="disabled">
+                    <el-input v-model="formData[`${item.field}`]" :type="item.type" v-bind="item.slotAttr" :disabled="disabled"  v-on="functionDict[item.field]">
                       <template #append v-if="item.append">{{ item.append }}</template>
                     </el-input>
                   </div>
                 </template>
                 <template v-else-if="item.type === 'select'">
                   <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-select v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled">
+                    <el-select v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled"  v-on="functionDict[item.field]">
                       <el-option
                         v-for="option in item.options"
                         :key="option.value"
-                        :value="option.value"
-                        :label="option.label"
+                        v-bind="option"
                         :disabled="disabled"
                       ></el-option>
                     </el-select>
@@ -33,17 +32,17 @@
                 </template>
                 <template v-else-if="item.type === 'switch'">
                   <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-switch v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled"></el-switch>
+                    <el-switch v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled"  v-on="functionDict[item.field]"></el-switch>
                   </div>
                 </template>
                 <template v-else-if="item.type === 'datepicker'">
                   <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-date-picker v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled"></el-date-picker>
+                    <el-date-picker v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled"  v-on="functionDict[item.field]"></el-date-picker>
                   </div>
                 </template>
                 <template v-else-if="item.type === 'radio'">
                   <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-radio-group v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled">
+                    <el-radio-group v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled"  v-on="functionDict[item.field]">
                       <el-radio v-for="option in item.options" :label="option.value" :key="option.value" :disabled="disabled">
                         {{ option.label }}
                       </el-radio>
@@ -70,6 +69,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import func from 'vue-temp/vue-editor-bridge'
 const props = defineProps({
   formItems: {
     type: Array,
@@ -91,6 +91,10 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  includeKeys: {
+    type: Array,
+    default: () => []
+  },
   colLayout: {
     type: Object,
     default: () => ({
@@ -106,16 +110,97 @@ const props = defineProps({
 const baseForm = ref(null)
 const formData = ref({})
 
+const functionDict = {} //
 /*******
- * @ description: 重置表单字段
- * @ return {*}
- ******/
-function reset() {
+* @ description: 注册函数
+* @ return {*}
+******/
+function regitFunc() {
   props.formItems.forEach((item) => {
-    formData.value[item.field] = item.default || ''
+    item.func &&
+      item.func.length > 0 &&
+      item.func.forEach((func) => {
+        if (functionDict[item.field]) {
+          functionDict[item.field][func] = ($event) => {
+            handleFunc(item.field, $event, func)
+          }
+        } else {
+          functionDict[item.field] = {
+            [func]: ($event) => {
+              handleFunc(item.field, $event, func)
+            }
+          }
+        }
+      })
   })
 }
-reset()
+regitFunc()
+
+/*******
+* @ description: 提交表单
+* @ return {*}
+******/
+const emits = defineEmits(['submit'])
+async function submit() {
+  let res = await baseForm.value.validate()
+  if (res) {
+    let newObj = {};
+    // 格式化数据
+    for (const key in formData.value) {
+      if (key in reformatters) {
+        newObj[key] = reformatters[key](formData.value[key]);
+      } else {
+        newObj[key] = formData.value[key];
+      }
+    }
+    return newObj;
+  }
+}
+
+/*******
+* @ description: 清除验证
+* @ return {*}
+******/
+function clearValidate() {
+  baseForm.value.clearValidate();
+}
+
+/*******
+* @ description: 通用处理函数
+* @ param {*} field 字段名
+* @ param {*} value 回调值
+* @ param {*} func 函数名
+* @ return {*}
+******/
+function handleFunc(field, value, func) {
+  emits('handleFunc', {
+    field,
+    value,
+    func
+  })
+}
+
+
+const reformatters = {}
+const formatters = {}
+/*******
+ * @ description: 重置表单字段，初始化则注册格式化函数
+ * @ return {*}
+ ******/
+function reset(isInit) {
+  props.formItems.forEach((item) => {
+    formData.value[item.field] = item.default || ''
+    if (isInit) {// 初始化
+      if (item.formatter) {
+        formatters[item.field] = item.formatter;
+      }
+      if (item.reformatter) {
+        reformatters[item.field] = item.reformatter;
+      }
+    }
+  })
+}
+reset(true)
 
 /*******
  * @ description: 回显表单数据
@@ -123,33 +208,20 @@ reset()
  * @ return {*}
  ******/
 function updateData(data) {
-  for (let item in data) {
-    formData.value[item] = data[item]
+  for (const key in data) {
+    // 有值或者包含在includeKeys中
+    if (key in formData.value || props.includeKeys.includes(key)) {
+      if (key in formatters) {
+        // 格式化数据
+        formData.value[key] =formatters[key](data[key])
+      } else {
+        formData.value[key]= data[key]
+      }
+    }
   }
 }
 
-/*******
- * @ description:  提交表单
- * @ return {*}
- ******/
-const emits = defineEmits(['submit'])
-function submit() {
-  emits('submit', formData.value)
-}
 
-/*******
- * @ description: 验证表单
- * @ return {*}
- ******/
-function validateForm() {
-  baseForm.value.validate((valid) => {
-    if (valid) {
-      submit()
-    } else {
-      return false
-    }
-  })
-}
 
-defineExpose({ reset, submit, updateData, validateForm })
+defineExpose({ reset,clearValidate, submit, updateData })
 </script>
