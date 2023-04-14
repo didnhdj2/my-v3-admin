@@ -13,36 +13,57 @@
               <el-form-item v-if="!item.isHidden" v-bind="item.itemsAttr" :prop="item.field">
                 <template v-if="['input', 'password', 'text', 'textarea'].includes(item.type)">
                   <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-input v-model="formData[`${item.field}`]" :type="item.type" v-bind="item.slotAttr" :disabled="disabled"  v-on="functionDict[item.field]">
+                    <el-input
+                      v-model="formData[`${item.field}`]"
+                      :type="item.type"
+                      v-bind="item.slotAttr"
+                      :disabled="disabled"
+                      v-on="functionDict[item.field]"
+                    >
                       <template #append v-if="item.append">{{ item.append }}</template>
                     </el-input>
                   </div>
                 </template>
                 <template v-else-if="item.type === 'select'">
                   <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-select v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled"  v-on="functionDict[item.field]">
-                      <el-option
-                        v-for="option in item.options"
-                        :key="option.value"
-                        v-bind="option"
-                        :disabled="disabled"
-                      ></el-option>
+                    <el-select
+                      v-model="formData[`${item.field}`]"
+                      v-bind="item.slotAttr"
+                      :disabled="disabled"
+                      v-on="functionDict[item.field]"
+                    >
+                      <el-option v-for="option in item.options" :key="option.value" v-bind="option" :disabled="disabled"></el-option>
                     </el-select>
                   </div>
                 </template>
                 <template v-else-if="item.type === 'switch'">
                   <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-switch v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled"  v-on="functionDict[item.field]"></el-switch>
+                    <el-switch
+                      v-model="formData[`${item.field}`]"
+                      v-bind="item.slotAttr"
+                      :disabled="disabled"
+                      v-on="functionDict[item.field]"
+                    ></el-switch>
                   </div>
                 </template>
                 <template v-else-if="item.type === 'datepicker'">
                   <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-date-picker v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled"  v-on="functionDict[item.field]"></el-date-picker>
+                    <el-date-picker
+                      v-model="formData[`${item.field}`]"
+                      v-bind="item.slotAttr"
+                      :disabled="disabled"
+                      v-on="functionDict[item.field]"
+                    ></el-date-picker>
                   </div>
                 </template>
                 <template v-else-if="item.type === 'radio'">
                   <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-radio-group v-model="formData[`${item.field}`]" v-bind="item.slotAttr" :disabled="disabled"  v-on="functionDict[item.field]">
+                    <el-radio-group
+                      v-model="formData[`${item.field}`]"
+                      v-bind="item.slotAttr"
+                      :disabled="disabled"
+                      v-on="functionDict[item.field]"
+                    >
                       <el-radio v-for="option in item.options" :label="option.value" :key="option.value" :disabled="disabled">
                         {{ option.label }}
                       </el-radio>
@@ -56,44 +77,39 @@
             </template>
           </el-col>
         </template>
-        <!--  -->
-        <el-col v-bind="btnLayout ? btnLayout : colLayout">
-          <el-form-item label-width="0">
-            <slot name="suffix"></slot>
-          </el-form-item>
-        </el-col>
       </el-row>
     </el-form>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import func from 'vue-temp/vue-editor-bridge'
+import { ref, inject } from 'vue'
 const props = defineProps({
   formItems: {
     type: Array,
-    default: () => []
+    default: () => [],
+    desc: '表单项'
   },
   formAttr: {
     type: Object,
-    default: () => ({ size: 'default', labelWidth: '140px' })
-  },
-  btnLayout: {
-    type: [Object, String],
-    default: ''
+    default: () => ({ size: 'default', labelWidth: '140px' }),
+    desc: '表单的默认属性'
   },
   divNode: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
+    desc: '表单项的div节点默认属性'
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
+    desc: '是否禁用表单'
   },
   includeKeys: {
     type: Array,
-    default: () => []
+    default: () => [],
+
+    desc: '需要包含额外的字段'
   },
   colLayout: {
     type: Object,
@@ -103,23 +119,28 @@ const props = defineProps({
       md: 8, // ≥992px
       sm: 24, // ≥768px
       xs: 24 //
-    })
+    }),
+    desc: '表单项的布局'
+  },
+  formINjectionKey: {
+    desc: '表单注入的key',
+    type: String,
+    required: true
   }
 })
 
 const baseForm = ref(null)
 const formData = ref({})
-
 const functionDict = {} //
 /*******
-* @ description: 注册函数
-* @ return {*}
-******/
+ * @ description: 注册事件函数
+ * @ return {*}
+ ******/
 function regitFunc() {
   props.formItems.forEach((item) => {
-    item.func &&
-      item.func.length > 0 &&
-      item.func.forEach((func) => {
+    item.events &&
+      item.events.length > 0 &&
+      item.events.forEach((func) => {
         if (functionDict[item.field]) {
           functionDict[item.field][func] = ($event) => {
             handleFunc(item.field, $event, func)
@@ -137,41 +158,41 @@ function regitFunc() {
 regitFunc()
 
 /*******
-* @ description: 提交表单
-* @ return {*}
-******/
+ * @ description: 提交表单
+ * @ return {*}
+ ******/
 const emits = defineEmits(['submit'])
 async function submit() {
   let res = await baseForm.value.validate()
   if (res) {
-    let newObj = {};
+    let newObj = {}
     // 格式化数据
     for (const key in formData.value) {
       if (key in reformatters) {
-        newObj[key] = reformatters[key](formData.value[key]);
+        newObj[key] = reformatters[key](formData.value[key])
       } else {
-        newObj[key] = formData.value[key];
+        newObj[key] = formData.value[key]
       }
     }
-    return newObj;
+    return newObj
   }
 }
 
 /*******
-* @ description: 清除验证
-* @ return {*}
-******/
+ * @ description: 清除验证
+ * @ return {*}
+ ******/
 function clearValidate() {
-  baseForm.value.clearValidate();
+  baseForm.value.clearValidate()
 }
 
 /*******
-* @ description: 通用处理函数
-* @ param {*} field 字段名
-* @ param {*} value 回调值
-* @ param {*} func 函数名
-* @ return {*}
-******/
+ * @ description: 通用处理函数
+ * @ param {*} field 字段名
+ * @ param {*} value 回调值
+ * @ param {*} func 函数名
+ * @ return {*}
+ ******/
 function handleFunc(field, value, func) {
   emits('handleFunc', {
     field,
@@ -179,7 +200,6 @@ function handleFunc(field, value, func) {
     func
   })
 }
-
 
 const reformatters = {}
 const formatters = {}
@@ -190,12 +210,13 @@ const formatters = {}
 function reset(isInit) {
   props.formItems.forEach((item) => {
     formData.value[item.field] = item.default || ''
-    if (isInit) {// 初始化
+    if (isInit) {
+      // 初始化
       if (item.formatter) {
-        formatters[item.field] = item.formatter;
+        formatters[item.field] = item.formatter
       }
       if (item.reformatter) {
-        reformatters[item.field] = item.reformatter;
+        reformatters[item.field] = item.reformatter
       }
     }
   })
@@ -213,15 +234,23 @@ function updateData(data) {
     if (key in formData.value || props.includeKeys.includes(key)) {
       if (key in formatters) {
         // 格式化数据
-        formData.value[key] =formatters[key](data[key])
+        formData.value[key] = formatters[key](data[key])
       } else {
-        formData.value[key]= data[key]
+        formData.value[key] = data[key]
       }
     }
   }
 }
 
+/*******
+ * @ description 通过依赖注入的方式导出方法
+ * @ return {*}
+ ******/
+if (props.injectionKey) {
+  const injectForm = inject(props.injectionKey, null)
+  injectForm && injectForm({ clearValidate, submit, reset, updateData })
+}
 
-
-defineExpose({ reset,clearValidate, submit, updateData })
+//导出方法
+defineExpose({ reset, clearValidate, submit, updateData })
 </script>

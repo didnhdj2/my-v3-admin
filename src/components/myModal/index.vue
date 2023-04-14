@@ -1,17 +1,19 @@
 <template>
   <div class="my-modal">
     <el-dialog :title="title" v-model="dialogVisible" v-bind="modalAttr" @close="handleClose">
-      <base-form v-bind="modalConfig" ref="myModal" @submit="submit">
+      <base-form v-bind="$attrs" ref="myModal">
         <template v-for="item in slotArr" :key="item.filed" #[item.field]>
           <slot :name="item.field"></slot>
         </template>
       </base-form>
-      <slot name="footer">
-        <div class="fr f-ac-jc">
-          <el-button @click="close">取 消</el-button>
-          <el-button type="primary" @click="handleConfirmClick">确 定</el-button>
-        </div>
-      </slot>
+      <template #footer>
+        <slot name="footer">
+          <div class="fr f-ac-jc">
+            <el-button @click="close">取 消</el-button>
+            <el-button type="primary" @click="handleConfirmClick">确 定</el-button>
+          </div>
+        </slot>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -19,13 +21,8 @@
 <script setup>
 import baseForm from '@/components/baseForm'
 import { computed, nextTick, ref } from 'vue'
-import usePageStore from '@/store/pages'
 
 const props = defineProps({
-  modalConfig: {
-    type: Object,
-    default: () => ({ span: 24 })
-  },
   modalAttr: {
     type: Object,
     default: () => ({
@@ -34,14 +31,10 @@ const props = defineProps({
         default: '50%'
       }
     })
-  },
-  pageName: {
-    type: String,
-    required: true
   }
 })
 
-const emit = defineEmits(['handleRest', 'finish'])
+const emit = defineEmits(['handleClose'])
 
 const dialogVisible = ref(false)
 const myModal = ref(null)
@@ -51,21 +44,35 @@ const slotArr = computed(() => {
   })
 })
 // 点击原来的按钮触发事件
+/*******
+ * @ description: 提交表单
+ * @ return {*}
+ ******/
 function handleConfirmClick() {
-  myModal.value.validateForm()
+  myModal.value.submit()
 }
 // 关闭表单
 function close() {
   dialogVisible.value = false
   handleClose()
 }
+
+/*******
+ * @ description: 重置表单并通知父组件
+ * @ return {*}
+ ******/
 function handleClose() {
   myModal.value.reset()
-  emit('handleRest')
+  emit('handleClose')
 }
 
 const title = ref('新增')
-// 初始化表单
+/*******
+ * @ description: 初始化表单
+ * @ param {*} data
+ * @ param {*} cus_title 自定义标题
+ * @ return {*}
+ ******/
 function init(data, cus_title) {
   // 避免不传参数时undefined报错
   dialogVisible.value = true
@@ -83,14 +90,6 @@ function init(data, cus_title) {
   nextTick(() => {
     myModal.value.updateData({ ...saveData })
   })
-}
-
-// 提交表单数据
-const store = usePageStore()
-async function submit(data) {
-  await store.editData(data, props.pageName)
-  close()
-  emit('finish')
 }
 
 // 导出方法
