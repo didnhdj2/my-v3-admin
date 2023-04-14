@@ -1,4 +1,4 @@
-export const formConfig = {
+export const formConfig = () => ({
   formItems: [
     {
       itemsAttr: {},
@@ -16,11 +16,11 @@ export const formConfig = {
           value: ''
         }
       ],
-      events: [], //特定插槽绑定的事件，具体参考el-plus的各个组件事件
-      injectionKey: 'formINjectionKey' //依赖注入的key
+      events: [] //特定插槽绑定的事件，具体参考el-plus的各个组件事件
     }
   ],
   formAttr: {},
   divNode: {},
-  colLayout: {}
-}
+  colLayout: {},
+  injectionKey: 'formINjectionKey' //依赖注入的key
+})

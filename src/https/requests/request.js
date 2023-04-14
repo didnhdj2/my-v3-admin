@@ -2,6 +2,7 @@ import axios from 'axios'
 import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/store/user'
 import pinia from '@/store'
+import { filterEmptyParams } from '@/utils'
 
 const NotShowLoadingArr = ['/user/order/get', '/user/douyin/monitor/processing/list']
 
@@ -14,6 +15,12 @@ const service = axios.create({
 let loading
 service.interceptors.request.use(
   (config) => {
+    // 过滤空参数
+    if (!config.allowEmpty) {
+      config.params && (config.params = filterEmptyParams(config.params))
+      config.data && (config.data = filterEmptyParams(config.data))
+    }
+
     if (store === null) {
       store = useUserStore(pinia)
     }

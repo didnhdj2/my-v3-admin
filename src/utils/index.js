@@ -59,7 +59,8 @@ const toDecimal2 = (x) => {
 export function filterEmptyParams(params) {
   const newObj = {}
   for (const key in params) {
-    if (params[key] !== undefined && params[key] !== '' && params[key] !== null) {
+    if (![undefined, '', null].includes(params[key])) {
+      // if (params[key] !== undefined && params[key] !== '' && params[key] !== null) {
       newObj[key] = params[key]
     }
   }

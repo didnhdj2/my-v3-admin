@@ -59,3 +59,31 @@ export function get(params, pageName) {
     params
   })
 }
+
+/*******
+ * @ description: 传入url获取数据
+ * @ param {*} url
+ * @ param {*} params
+ * @ return {*}
+ ******/
+export function getByUrl(url, params) {
+  return request({
+    url: url,
+    method: 'get',
+    params
+  })
+}
+
+/*******
+ * @ description: 传入url提交数据
+ * @ param {*} url
+ * @ param {*} data
+ * @ return {*}
+ ******/
+export function postByUrl(url, data) {
+  return request({
+    url: url,
+    method: 'post',
+    data
+  })
+}
