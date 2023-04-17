@@ -4,7 +4,7 @@ tableItems:[] {Array} 表头配置
 需要特殊处理的slot,formatter配置将不起作用
 
  ******/
-export const getTableConfig = ({ getAdmin, handleSelectionChange }) => ({
+export const getTableConfig = ({ handleSelectionChange }) => ({
   // 表头配置
   tableItems: [
     {

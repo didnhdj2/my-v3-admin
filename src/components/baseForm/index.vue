@@ -108,7 +108,7 @@ const props = defineProps({
   includeKeys: {
     type: Array,
     default: () => [],
-    desc: '需要包含额外的字段'
+    desc: '不在表单中的，回显时需要包含的额外字段'
   },
   colLayout: {
     type: Object,
@@ -154,7 +154,6 @@ function regitFunc() {
       })
   })
 }
-regitFunc()
 
 /*******
  * @ description: 提交表单
@@ -164,17 +163,26 @@ const emits = defineEmits(['submit'])
 async function submit() {
   let res = await baseForm.value.validate()
   if (res) {
-    let newObj = {}
-    // 格式化数据
-    for (const key in formData.value) {
-      if (key in reformatters) {
-        newObj[key] = reformatters[key](formData.value[key])
-      } else {
-        newObj[key] = formData.value[key]
-      }
-    }
+    let newObj = fetchData()
     return newObj
   }
+}
+
+/*******
+ * @ description: 返回不校验的数据
+ * @ return {*}
+ ******/
+function fetchData() {
+  let newObj = {}
+  // 格式化数据
+  for (const key in formData.value) {
+    if (key in reformatters) {
+      newObj[key] = reformatters[key](formData.value[key])
+    } else {
+      newObj[key] = formData.value[key]
+    }
+  }
+  return newObj
 }
 
 /*******
@@ -202,21 +210,31 @@ function handleFunc(field, value, func) {
 
 const reformatters = {}
 const formatters = {}
+
 /*******
  * @ description: 重置表单字段，初始化则注册格式化函数
+ * @ param {*} isInit 是否初始化
+ * @ param {*} extraField 额外字段，不修改值
  * @ return {*}
  ******/
-function reset(isInit) {
+function reset(isInit, extraField = {}) {
   props.formItems.forEach((item) => {
-    formData.value[item.field] = item.default || ''
+    if (!(item.field in extraField)) {
+      formData.value[item.field] = item.default || ''
+    }
+
     if (isInit) {
       // 初始化
       if (item.formatter) {
+        // 注册格式化函数
         formatters[item.field] = item.formatter
       }
       if (item.reformatter) {
+        // 注册反格式化函数
         reformatters[item.field] = item.reformatter
       }
+      // 注册事件函数
+      regitFunc()
     }
   })
 }
@@ -247,9 +265,8 @@ function updateData(data) {
  ******/
 if (props.injectionKey) {
   const injectForm = inject(props.injectionKey, null)
-  injectForm && injectForm({ clearValidate, submit, reset, updateData })
+  injectForm && injectForm({ clearValidate, submit, reset, updateData, fetchData })
 }
-
 //导出方法
-defineExpose({ reset, clearValidate, submit, updateData })
+defineExpose({ reset, clearValidate, submit, updateData, fetchData })
 </script>
