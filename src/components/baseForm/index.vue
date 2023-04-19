@@ -17,7 +17,7 @@
                       v-model="formData[`${item.field}`]"
                       :type="item.type"
                       v-bind="item.slotAttr"
-                      :disabled="disabled"
+                      :disabled="disabled || item.disabled"
                       v-on="functionDict[item.field]"
                     >
                       <template #append v-if="item.append">{{ item.append }}</template>
@@ -29,10 +29,15 @@
                     <el-select
                       v-model="formData[`${item.field}`]"
                       v-bind="item.slotAttr"
-                      :disabled="disabled"
+                      :disabled="disabled || item.disabled"
                       v-on="functionDict[item.field]"
                     >
-                      <el-option v-for="option in item.options" :key="option.value" v-bind="option" :disabled="disabled"></el-option>
+                      <el-option
+                        v-for="option in item.options"
+                        :key="option.value"
+                        v-bind="option"
+                        :disabled="disabled || item.disabled"
+                      ></el-option>
                     </el-select>
                   </div>
                 </template>
@@ -41,7 +46,7 @@
                     <el-switch
                       v-model="formData[`${item.field}`]"
                       v-bind="item.slotAttr"
-                      :disabled="disabled"
+                      :disabled="disabled || item.disabled"
                       v-on="functionDict[item.field]"
                     ></el-switch>
                   </div>
@@ -51,7 +56,7 @@
                     <el-date-picker
                       v-model="formData[`${item.field}`]"
                       v-bind="item.slotAttr"
-                      :disabled="disabled"
+                      :disabled="disabled || item.disabled"
                       v-on="functionDict[item.field]"
                     ></el-date-picker>
                   </div>
@@ -61,10 +66,15 @@
                     <el-radio-group
                       v-model="formData[`${item.field}`]"
                       v-bind="item.slotAttr"
-                      :disabled="disabled"
+                      :disabled="disabled || item.disabled"
                       v-on="functionDict[item.field]"
                     >
-                      <el-radio v-for="option in item.options" :label="option.value" :key="option.value" :disabled="disabled">
+                      <el-radio
+                        v-for="option in item.options"
+                        :label="option.value"
+                        :key="option.value"
+                        :disabled="disabled || item.disabled"
+                      >
                         {{ option.label }}
                       </el-radio>
                     </el-radio-group>
@@ -125,6 +135,11 @@ const props = defineProps({
     desc: '表单注入的key',
     type: String,
     required: true
+  },
+  cusName: {
+    desc: '表单的自定义名称',
+    type: String,
+    required: true
   }
 })
 
@@ -176,8 +191,8 @@ function fetchData() {
   let newObj = {}
   // 格式化数据
   for (const key in formData.value) {
-    if (key in reformatters) {
-      newObj[key] = reformatters[key](formData.value[key])
+    if (key in parsers) {
+      newObj[key] = parsers[key](formData.value[key])
     } else {
       newObj[key] = formData.value[key]
     }
@@ -201,15 +216,32 @@ function clearValidate() {
  * @ return {*}
  ******/
 function handleFunc(field, value, func) {
-  emits('handleFunc', {
-    field,
-    value,
-    func
-  })
+  emits(
+    'handleFunc',
+    {
+      field,
+      value,
+      func
+    },
+    props.cusName
+  )
 }
 
-const reformatters = {}
+const parsers = {}
 const formatters = {}
+
+function regitFomatter() {
+  props.formItems.forEach((item) => {
+    if (item.formatter) {
+      // 注册格式化函数
+      formatters[item.field] = item.formatter
+    }
+    if (item.parse) {
+      // 注册解析化函数
+      parsers[item.field] = item.parse
+    }
+  })
+}
 
 /*******
  * @ description: 重置表单字段，初始化则注册格式化函数
@@ -222,21 +254,13 @@ function reset(isInit, extraField = {}) {
     if (!(item.field in extraField)) {
       formData.value[item.field] = item.default || ''
     }
-
-    if (isInit) {
-      // 初始化
-      if (item.formatter) {
-        // 注册格式化函数
-        formatters[item.field] = item.formatter
-      }
-      if (item.reformatter) {
-        // 注册反格式化函数
-        reformatters[item.field] = item.reformatter
-      }
-      // 注册事件函数
-      regitFunc()
-    }
   })
+  if (isInit) {
+    // 初始化
+    regitFomatter()
+    // 注册事件函数
+    regitFunc()
+  }
 }
 reset(true)
 
@@ -245,10 +269,10 @@ reset(true)
  * @ param {*} data
  * @ return {*}
  ******/
-function updateData(data) {
+function updateData(data, excludeList = []) {
   for (const key in data) {
     // 有值或者包含在includeKeys中
-    if (key in formData.value || props.includeKeys.includes(key)) {
+    if (!excludeList.includes(key) && (key in formData.value || props.includeKeys.includes(key))) {
       if (key in formatters) {
         // 格式化数据
         formData.value[key] = formatters[key](data[key])
@@ -265,8 +289,8 @@ function updateData(data) {
  ******/
 if (props.injectionKey) {
   const injectForm = inject(props.injectionKey, null)
-  injectForm && injectForm({ clearValidate, submit, reset, updateData, fetchData })
+  injectForm && injectForm({ clearValidate, submit, reset, updateData, fetchData, regitFomatter, regitFunc })
 }
 //导出方法
-defineExpose({ reset, clearValidate, submit, updateData, fetchData })
+defineExpose({ reset, clearValidate, submit, updateData, fetchData, regitFomatter, regitFunc })
 </script>

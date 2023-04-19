@@ -179,7 +179,7 @@ onBeforeUnmount(() => {
   clearInterval(stateIntel.value)
 })
 
-getDenominations()
+// getDenominations()
 // 导出方法
 defineExpose({ init, close })
 </script>

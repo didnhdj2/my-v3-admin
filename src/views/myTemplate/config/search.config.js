@@ -30,49 +30,40 @@ colLayout: 统一 布局配置
 export const getSearchConfig = () => ({
   formItems: [
     {
-      field: 'path',
+      field: 'likeUnionId',
       type: 'input',
       itemsAttr: {
-        label: '筛选搜索',
+        label: '抖音号',
         labelWidth: '90',
         rules: []
       },
       slotAttr: {
-        placeholder: '请输入目录',
+        placeholder: '请输入抖音号',
         size: 'default'
       }
     },
     {
-      field: 'isShow',
-      type: 'select',
+      field: 'createTime',
+      type: 'datepicker',
       itemsAttr: {
         label: '',
         labelWidth: '30',
         rules: []
       },
-      slotAttr: {
-        placeholder: '选择显示状态',
-        size: 'default'
-      },
-      options: [
-        { label: '全部', value: '' },
-        { label: '显示', value: 1 },
-        { label: '不显示', value: 0 }
-      ]
-    },
-    {
-      field: 'pan',
-      type: 'select',
-      itemsAttr: {
-        label: '',
-        labelWidth: '30',
-        rules: []
+      colLayout: {
+        xl: 6, // ≥1920px
+        lg: 9, // ≥1200px
+        md: 12, // ≥992px
+        sm: 24, // ≥768px
+        xs: 24
       },
       slotAttr: {
-        placeholder: '选择网盘',
-        size: 'default'
-      },
-      options: []
+        type: 'daterange',
+        'range-separator': '至',
+        'start-placeholder': '请选择',
+        'end-placeholder': '请选择',
+        'value-format': 'YYYY-MM-DD HH:mm:ss'
+      }
     }
   ],
   formAttr: {
@@ -83,8 +74,8 @@ export const getSearchConfig = () => ({
   colLayout: {
     xl: 4, // ≥1920px
     lg: 4, // ≥1200px
-    md: 4, // ≥992px
-    sm: 12, // ≥768px
-    xs: 24
+    md: 6, // ≥992px
+    sm: 24, // ≥768px
+    xs: 24 //
   }
 })
