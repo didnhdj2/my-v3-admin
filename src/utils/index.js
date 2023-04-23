@@ -66,3 +66,20 @@ export function filterEmptyParams(params) {
   }
   return newObj
 }
+
+/*******
+ * @ description: 深拷贝一个对象
+ * @ param {*} obj
+ * @ return {*}
+ ******/
+export function deepCopy(obj) {
+  if (typeof obj !== "object") {
+    return obj;
+  }
+  const newObj = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    newObj[key] = deepCopy(obj[key]);
+  }
+  return newObj;
+}
+
