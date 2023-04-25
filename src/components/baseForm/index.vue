@@ -5,83 +5,29 @@
         <template v-for="(item, index) in formItems" :key="index">
           <el-col v-bind="item.colLayout ? item.colLayout : colLayout">
             <!-- 非表单子项的slot -->
-            <template v-if="item.type === 'outSide-slot'">
+            <template v-if="item.type === 'extraSlot'">
               <slot :name="item.field"></slot>
             </template>
             <!-- 表单子项的slot -->
             <template v-else>
               <el-form-item v-if="!item.isHidden" v-bind="item.itemsAttr" :prop="item.field">
-                <template v-if="['input', 'password', 'text', 'textarea'].includes(item.type)">
-                  <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-input
-                      v-model="formData[`${item.field}`]"
-                      :type="item.type"
-                      v-bind="item.slotAttr"
-                      :disabled="disabled || item.disabled"
-                      v-on="functionDict[item.field]"
-                    >
-                      <template #append v-if="item.append">{{ item.append }}</template>
-                    </el-input>
-                  </div>
-                </template>
-                <template v-else-if="item.type === 'select'">
-                  <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-select
-                      v-model="formData[`${item.field}`]"
-                      v-bind="item.slotAttr"
-                      :disabled="disabled || item.disabled"
-                      v-on="functionDict[item.field]"
-                    >
-                      <el-option
-                        v-for="option in item.options"
-                        :key="option.value"
-                        v-bind="option"
-                        :disabled="disabled || item.disabled"
-                      ></el-option>
-                    </el-select>
-                  </div>
-                </template>
-                <template v-else-if="item.type === 'switch'">
-                  <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-switch
-                      v-model="formData[`${item.field}`]"
-                      v-bind="item.slotAttr"
-                      :disabled="disabled || item.disabled"
-                      v-on="functionDict[item.field]"
-                    ></el-switch>
-                  </div>
-                </template>
-                <template v-else-if="item.type === 'datepicker'">
-                  <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-date-picker
-                      v-model="formData[`${item.field}`]"
-                      v-bind="item.slotAttr"
-                      :disabled="disabled || item.disabled"
-                      v-on="functionDict[item.field]"
-                    ></el-date-picker>
-                  </div>
-                </template>
-                <template v-else-if="item.type === 'radio'">
-                  <div v-bind="item.divNode ? item.divNode : divNode">
-                    <el-radio-group
-                      v-model="formData[`${item.field}`]"
-                      v-bind="item.slotAttr"
-                      :disabled="disabled || item.disabled"
-                      v-on="functionDict[item.field]"
-                    >
-                      <el-radio
-                        v-for="option in item.options"
-                        :label="option.value"
-                        :key="option.value"
-                        :disabled="disabled || item.disabled"
-                      >
-                        {{ option.label }}
-                      </el-radio>
-                    </el-radio-group>
-                  </div>
-                </template>
-                <template v-else-if="item.type === 'slot'">
+                <template v-if="item.type === 'slot'">
                   <slot :name="item.field"></slot>
+                </template>
+                <template v-else>
+                <div v-bind="item.divNode ? item.divNode : divNode">
+                  <component :is="item.type"
+                    v-model="formData[`${item.field}`]"
+                    :type="item.type"
+                    v-bind="item.slotAttr"
+                    :disabled="disabled || item.disabled"
+                    v-on="functionDict[item.field]"
+                  >
+                  <template v-if="item.children &&item.children.length">
+                      <component :is="child.type" v-for="child in item.children"></component>
+                    </template>
+                  </component>
+                </div>
                 </template>
               </el-form-item>
             </template>

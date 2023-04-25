@@ -33,27 +33,30 @@ injectionKey: 'formINjectionKey'  //依赖注入的key
 ******/
 
 // 弹窗配置
-export const getModalConfig = () => ({
+export const getModalConfig= () => ({
   // 字段配置
   formItems: [
     {
       field: 'searchKeyword',
       type: 'input', // input,radio,datepicker,switch,select, slot, outSide-slot,'password', 'text', 'textarea'
       // isHidden:false,
-
+      isEl: true, //
+      disabled: false,
       // 绑定到formItem的属性
       itemsAttr: {
         label: '监控账号:',
         rules: [{ required: true, message: '请输入监控账号', trigger: 'blur' }],
         required: true
       },
+
       // 绑定到input的属性
       slotAttr: {
         placeholder: '抖音号码/抖音首页地址',
         style: {
           width: '350px'
         }
-      }
+      },
+      children:[], // 子项
     },
     {
       field: 'enableWarn',
@@ -136,7 +139,7 @@ export const getModalConfig = () => ({
         style: {
           width: '350px'
         }
-      }
+      },
     }
   ],
   //
