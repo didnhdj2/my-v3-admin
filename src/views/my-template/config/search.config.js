@@ -11,7 +11,7 @@
     - switch,
     - select,
     - slot,
-    - outSide-slot
+    - ouSlot
     isHidden
     itemsAttr formItem的属性 label rules required
     slotAttr  slot的属性  input radio datepicker switch select 的属性，除了双向绑定值外，都可以配置
@@ -39,12 +39,52 @@ export const getSearchConfig = () => ({
       },
       slotAttr: {
         placeholder: '请输入抖音号',
-        size: 'default'
+        size: 'default',
+        insideSlot: [
+          {
+            slot: 'append',
+            value: '搜索'
+          }
+        ]
       }
     },
     {
+      field: 'like',
+      type: 'radio-group',
+      itemsAttr: {
+        label: '抖音号',
+        labelWidth: '90',
+        rules: []
+      },
+      default: '1',
+      slotAttr: {
+        placeholder: '请输入抖音号',
+        size: 'default'
+      },
+      children: [
+        {
+          type: 'radio-button',
+          slotAttr: {
+            label: '抖音号',
+            value: '1'
+          }
+        },
+
+        {
+          type: 'radio-button',
+          slotAttr: {
+            label: '快手号',
+            value: '3'
+          },
+          events: {
+            change: () => {}
+          }
+        }
+      ]
+    },
+    {
       field: 'createTime',
-      type: 'datepicker',
+      type: 'date-picker',
       itemsAttr: {
         label: '',
         labelWidth: '30',
@@ -68,7 +108,8 @@ export const getSearchConfig = () => ({
   ],
   formAttr: {
     labelWidth: '100px',
-    size: 'default'
+    size: 'default',
+    'validate-on-rule-change': false
   },
   // itemStyle: {},
   colLayout: {
@@ -79,5 +120,5 @@ export const getSearchConfig = () => ({
     xs: 24 //
   },
   cusName: 'searchForm',
-  cusName: 'formINjectionKey'
+  formINjectionKey: 'formINjectionKey'
 })

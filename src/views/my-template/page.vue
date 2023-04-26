@@ -65,7 +65,7 @@
 
 <script setup>
 import { onBeforeUnmount, ref } from 'vue'
-import { getModalConfig, getTableConfig,getSearchConfig } from './config'
+import { getModalConfig, getTableConfig, getSearchConfig } from './config'
 import { onGoList, edit, remove } from '@/https/apis/dy-tool/fans-monitor'
 import { ElMessage } from 'element-plus'
 import { regFenToYuan } from '@/utils'
@@ -265,6 +265,8 @@ function addFinish() {
 
 console.log('===============form================')
 const searchConfig = getSearchConfig()
+
+function handleSubmit() {}
 </script>
 
 <style lang="scss" scoped>

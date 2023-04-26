@@ -1,54 +1,56 @@
 <template>
   <div class="w_100">
     <el-form ref="baseForm" :model="formData" v-bind="formAttr">
-      <el-row>
+      <div class="fr fw">
         <template v-for="(item, index) in formItems" :key="index">
-          <el-col v-bind="item.colLayout ? item.colLayout : colLayout">
-            <!-- 非表单子项的slot -->
-            <template v-if="item.type === 'oSlot'">
-              <slot :name="item.field"></slot>
-            </template>
-            <!-- 表单子项的slot -->
-            <template v-else>
-              <el-form-item v-if="!item.isHidden" v-bind="item.itemsAttr" :prop="item.field">
-                <template v-if="item.type === 'slot'">
-                  <slot :name="item.field"></slot>
-                </template>
-                <template v-else>
-                  <div v-bind="item.divNode ? item.divNode : divNode">
-                    <component
-                      :is="getComponentType(item)"
-                      v-model="formData[`${item.field}`]"
-                      v-bind="item.slotAttr"
-                      :disabled="disabled || item.disabled"
-                      v-on="functionDict[item.field]"
-                    >
-                      <!-- insideSlot必然存在，没有传入则为空数组 -->
-                      <template #[iSlot.slot] v-for="iSlot in item.slotAttr.insideSlot">
-                        <template v-if="iSlot.name">
-                          <slot :name="iSlot.name"></slot>
-                        </template>
-                        <template v-else>
+          <!-- 非表单子项的slot -->
+          <template v-if="item.type === 'oSlot'">
+            <slot :name="item.field"></slot>
+          </template>
+          <!-- 表单子项的slot -->
+          <template v-else>
+            <el-form-item v-if="!item.isHidden" v-bind="item.itemsAttr" :prop="item.field">
+              <template v-if="item.type === 'slot'">
+                <slot :name="item.field"></slot>
+              </template>
+              <template v-else-if="item.type === 'upload' || item.type == 'cascader'"></template>
+              <template v-else>
+                <div v-bind="item.divNode ? item.divNode : divNode">
+                  <component
+                    :is="item.isCus ? item.type : `el-${item.type}`"
+                    v-model="formData[`${item.field}`]"
+                    v-bind="item.slotAttr"
+                    :disabled="disabled || item.disabled"
+                    v-on="functionDict[item.field] || {}"
+                  >
+                    <!-- insideSlot必然存在，没有传入则为空数组 -->
+                    <template #[iSlot.slot] v-for="iSlot in item.slotAttr.insideSlot">
+                      <template v-if="iSlot.name">
+                        <slot :name="iSlot.name"></slot>
+                      </template>
+                      <template v-else>
+                        <div v-on="iSlot.events || {}">
                           {{ iSlot.value }}
-                        </template>
+                        </div>
                       </template>
-                      <template v-if="item.children && item.children.length">
-                        <component
-                          :is="getComponentType(child)"
-                          v-for="child in item.children"
-                          v-bind="child.slotAttr"
-                          :disabled="disabled || child.disabled"
-                          v-on="functionDict[item.field][child.field]"
-                        ></component>
-                      </template>
-                    </component>
-                  </div>
-                </template>
-              </el-form-item>
-            </template>
-          </el-col>
+                    </template>
+                    <template v-if="item.children && item.children.length">
+                      <component
+                        :is="child.isCus ? child.type : `el-${child.type}`"
+                        v-for="child in item.children"
+                        :disabled="disabled || child.disabled"
+                        v-bind="child.slotAttr"
+                        v-on="child.events || {}"
+                      ></component>
+                    </template>
+                  </component>
+                </div>
+              </template>
+            </el-form-item>
+          </template>
+          <!-- </el-col> -->
         </template>
-      </el-row>
+      </div>
     </el-form>
   </div>
 </template>
@@ -81,17 +83,6 @@ const props = defineProps({
     default: () => [],
     desc: '不在表单中的，回显时需要包含的额外字段'
   },
-  colLayout: {
-    type: Object,
-    default: () => ({
-      xl: 6, // ≥1920px
-      lg: 6, // ≥1200px
-      md: 8, // ≥992px
-      sm: 24, // ≥768px
-      xs: 24 //
-    }),
-    desc: '表单项的布局'
-  },
   formINjectionKey: {
     desc: '表单注入的key',
     type: String,
@@ -103,20 +94,6 @@ const props = defineProps({
     required: true
   }
 })
-
-/*******
- * @ description: 获取组件类型
- * @ param {*} item
- * @ return {*}
- ******/
-function getComponentType(item) {
-  if (item.isCus) {
-    // 自定义组件，需要事先全局注册
-    return item.type
-  }
-  // el组件
-  return `el-${item.type}`
-}
 
 /* -==============================================- */
 const baseForm = ref(null)
@@ -147,7 +124,7 @@ function regitFunc() {
 }
 
 /*******
- * @ description: 提交表单
+ * @ description: 提交表单，返回校验后的数据
  * @ return {*}
  ******/
 const emits = defineEmits(['submit'])
@@ -182,6 +159,16 @@ function fetchData() {
  ******/
 function clearValidate() {
   baseForm.value.clearValidate()
+}
+
+/*******
+ * @ description: 校验单个字段
+ * @ param {*} field
+ * @ return {*}
+ ******/
+async function validateField(field) {
+  let res = await baseForm.value.validateField(field)
+  return res
 }
 
 /*******
@@ -264,13 +251,13 @@ function updateData(data, excludeList = []) {
 }
 
 /*******
- * @ description 通过依赖注入的方式导出方法
+ * @ description 通过依赖注入的方式导出方法,可以跨组件调用
  * @ return {*}
  ******/
 if (props.injectionKey) {
   const injectForm = inject(props.injectionKey, null)
-  injectForm && injectForm({ clearValidate, submit, reset, updateData, fetchData, regitFomatter, regitFunc })
+  injectForm && injectForm({ clearValidate, submit, reset, updateData, fetchData, regitFomatter, regitFunc, validateField })
 }
-//导出方法
-defineExpose({ reset, clearValidate, submit, updateData, fetchData, regitFomatter, regitFunc })
+//导出方法，只能父组件调用
+defineExpose({ reset, clearValidate, submit, updateData, fetchData, regitFomatter, regitFunc, validateField })
 </script>
