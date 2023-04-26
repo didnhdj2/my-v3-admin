@@ -77,5 +77,7 @@ export const getSearchConfig = () => ({
     md: 6, // ≥992px
     sm: 24, // ≥768px
     xs: 24 //
-  }
+  },
+  cusName: 'searchForm',
+  cusName: 'formINjectionKey'
 })

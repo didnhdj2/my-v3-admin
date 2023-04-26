@@ -40,7 +40,7 @@ export const getModalConfig = () => ({
       field: 'searchKeyword',
       type: 'input', // input,radio,datepicker,switch,select, slot, outSide-slot,'password', 'text', 'textarea'
       // isHidden:false,
-      // isCus: true, 是否自定义组件      isEl: true, //
+      // isCus: true, 是否自定义组件
       disabled: false,
       // 绑定到formItem的属性
       itemsAttr: {

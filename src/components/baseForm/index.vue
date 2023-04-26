@@ -115,7 +115,7 @@ function getComponentType(item) {
     return item.type
   }
   // el组件
-  retun`el-${item.type}`
+  return `el-${item.type}`
 }
 
 /* -==============================================- */

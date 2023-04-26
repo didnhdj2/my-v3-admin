@@ -12,7 +12,7 @@
       </base-form>
     </div>
     <!-- 表格 -->
-    <base-table :listData="listData" v-bind="contentTableConfig">
+    <!-- <base-table :listData="listData" v-bind="contentTableConfig">
       <template #dataSet="{ row }">
         <el-popover placement="bottom-end" :width="610" trigger="hover">
           <template #reference><span class="color-3c">查看详情</span></template>
@@ -39,9 +39,9 @@
         <el-button type="danger" @click="handleStart(row, false)">编辑</el-button>
         <el-button type="success" @click="handleStart(row)">{{ row.state == 1 ? '开始' : '完结' }}</el-button>
       </template>
-    </base-table>
+    </base-table> -->
     <!-- 分页 -->
-    <div class="mb-10 fr f-je" v-if="pageTotal > 1">
+    <!-- <div class="mb-10 fr f-je" v-if="pageTotal > 1">
       <el-pagination
         v-model:current-page="params.pageNo"
         v-model:page-size="params.pageSize"
@@ -49,23 +49,23 @@
         :layout="'total,  prev, pager, next,'"
         :page-count="pageTotal"
       ></el-pagination>
-    </div>
+    </div> -->
 
     <!-- t弹窗 -->
-    <my-modal ref="modal" :modalConfig="mConfig" :modalAttr="modalAttr" :pageName="pageName" @handleRest="handleRest" @finish="addFinish">
+    <!-- <my-modal ref="modal" :modalConfig="mConfig" :modalAttr="modalAttr" :pageName="pageName" @handleRest="handleRest" @finish="addFinish">
       <template #price>
         <el-input v-model="formData.price" class="w-350" placeholder="请输入订单单价" @input="handleInputChange" />
       </template>
       <template #payAmount>
         <el-input v-model="formData.payAmount" class="w-350" placeholder="请输入收款金额" @input="handleInputChange" />
       </template>
-    </my-modal>
+    </my-modal> -->
   </div>
 </template>
 
 <script setup>
 import { onBeforeUnmount, ref } from 'vue'
-import { getModalConfig, getTableConfig } from './config'
+import { getModalConfig, getTableConfig,getSearchConfig } from './config'
 import { onGoList, edit, remove } from '@/https/apis/dy-tool/fans-monitor'
 import { ElMessage } from 'element-plus'
 import { regFenToYuan } from '@/utils'
@@ -262,6 +262,9 @@ function handleRest() {
 function addFinish() {
   getDataList()
 }
+
+console.log('===============form================')
+const searchConfig = getSearchConfig()
 </script>
 
 <style lang="scss" scoped>
