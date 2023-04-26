@@ -31,3 +31,5 @@ colLayout:// 统一 布局配置
 
 }
 ```
+
+### 复杂组件 el-cascader el-upload 单独封装

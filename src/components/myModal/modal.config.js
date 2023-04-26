@@ -11,7 +11,7 @@
     - switch,
     - select,
     - slot,
-    - outSide-slot
+    - oSlot
     isHidden
     itemsAttr formItem的属性 label rules required
     slotAttr  slot的属性  input radio datepicker switch select 的属性，除了双向绑定值外，都可以配置

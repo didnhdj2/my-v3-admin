@@ -5,7 +5,7 @@
         <template v-for="(item, index) in formItems" :key="index">
           <el-col v-bind="item.colLayout ? item.colLayout : colLayout">
             <!-- 非表单子项的slot -->
-            <template v-if="item.type === 'extraSlot'">
+            <template v-if="item.type === 'oSlot'">
               <slot :name="item.field"></slot>
             </template>
             <!-- 表单子项的slot -->
@@ -15,19 +15,34 @@
                   <slot :name="item.field"></slot>
                 </template>
                 <template v-else>
-                <div v-bind="item.divNode ? item.divNode : divNode">
-                  <component :is="item.type"
-                    v-model="formData[`${item.field}`]"
-                    :type="item.type"
-                    v-bind="item.slotAttr"
-                    :disabled="disabled || item.disabled"
-                    v-on="functionDict[item.field]"
-                  >
-                  <template v-if="item.children &&item.children.length">
-                      <component :is="child.type" v-for="child in item.children"></component>
-                    </template>
-                  </component>
-                </div>
+                  <div v-bind="item.divNode ? item.divNode : divNode">
+                    <component
+                      :is="getComponentType(item)"
+                      v-model="formData[`${item.field}`]"
+                      v-bind="item.slotAttr"
+                      :disabled="disabled || item.disabled"
+                      v-on="functionDict[item.field]"
+                    >
+                      <!-- insideSlot必然存在，没有传入则为空数组 -->
+                      <template #[iSlot.slot] v-for="iSlot in item.slotAttr.insideSlot">
+                        <template v-if="iSlot.name">
+                          <slot :name="iSlot.name"></slot>
+                        </template>
+                        <template v-else>
+                          {{ iSlot.value }}
+                        </template>
+                      </template>
+                      <template v-if="item.children && item.children.length">
+                        <component
+                          :is="getComponentType(child)"
+                          v-for="child in item.children"
+                          v-bind="child.slotAttr"
+                          :disabled="disabled || child.disabled"
+                          v-on="functionDict[item.field][child.field]"
+                        ></component>
+                      </template>
+                    </component>
+                  </div>
                 </template>
               </el-form-item>
             </template>
@@ -89,6 +104,21 @@ const props = defineProps({
   }
 })
 
+/*******
+ * @ description: 获取组件类型
+ * @ param {*} item
+ * @ return {*}
+ ******/
+function getComponentType(item) {
+  if (item.isCus) {
+    // 自定义组件，需要事先全局注册
+    return item.type
+  }
+  // el组件
+  retun`el-${item.type}`
+}
+
+/* -==============================================- */
 const baseForm = ref(null)
 const formData = ref({})
 const functionDict = {} //
@@ -185,6 +215,10 @@ function regitFomatter() {
     if (item.parse) {
       // 注册解析化函数
       parsers[item.field] = item.parse
+    }
+    if (item.slotAttr && !item.slotAttr.insideSlot) {
+      // 注册插槽
+      item.slotAttr.insideSlot = []
     }
   })
 }

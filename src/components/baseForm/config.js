@@ -11,7 +11,7 @@
     - switch,
     - select,
     - slot,
-    - outSide-slot
+    - oSlot
     isHidden
     itemsAttr formItem的属性 label rules required
     slotAttr  slot的属性  input radio datepicker switch select 的属性，除了双向绑定值外，都可以配置
@@ -33,14 +33,14 @@ injectionKey: 'formINjectionKey'  //依赖注入的key
 ******/
 
 // 弹窗配置
-export const getModalConfig= () => ({
+export const getModalConfig = () => ({
   // 字段配置
   formItems: [
     {
       field: 'searchKeyword',
       type: 'input', // input,radio,datepicker,switch,select, slot, outSide-slot,'password', 'text', 'textarea'
       // isHidden:false,
-      isEl: true, //
+      // isCus: true, 是否自定义组件      isEl: true, //
       disabled: false,
       // 绑定到formItem的属性
       itemsAttr: {
@@ -54,9 +54,16 @@ export const getModalConfig= () => ({
         placeholder: '抖音号码/抖音首页地址',
         style: {
           width: '350px'
-        }
+        },
+        insideSlot: [
+          {
+            slot: '',
+            name: '',
+            value: '' //没有value时，默认导出
+          }
+        ] //组件内部的插槽
       },
-      children:[], // 子项
+      children: []
     },
     {
       field: 'enableWarn',
@@ -139,7 +146,7 @@ export const getModalConfig= () => ({
         style: {
           width: '350px'
         }
-      },
+      }
     }
   ],
   //

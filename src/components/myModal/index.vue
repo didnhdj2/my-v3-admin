@@ -2,7 +2,7 @@
   <div class="my-modal">
     <el-dialog :title="title" v-model="dialogVisible" v-bind="modalAttr" @close="handleClose">
       <base-form v-bind="$attrs" ref="myModal">
-        <template v-for="item in slotArr" :key="item.filed" #[item.field]>
+        <template v-for="item in slotArr" :key="item.field" #[item.field]>
           <slot :name="item.field"></slot>
         </template>
       </base-form>
@@ -39,9 +39,18 @@ const emit = defineEmits(['handleClose'])
 const dialogVisible = ref(false)
 const myModal = ref(null)
 const slotArr = computed(() => {
-  return props.modalConfig.formItems.filter((element) => {
-    return element.type == 'slot' || element.type == 'outSide-slot'
-  })
+  return props.modalConfig.formItems.reduce((preArr, item) => {
+    if (item.slotArr && item.slotArr.insideSlot && item.slotArr.insideSlot.length) {
+      item.slotArr.insideSlot.forEach((element) => {
+        if (element.name) {
+          preArr.push(element.name)
+        }
+      })
+    }
+    if (item.type == 'slot' || item.type == 'oSlot') {
+      preArr.push(item.field)
+    }
+  }, [])
 })
 // 点击原来的按钮触发事件
 /*******
