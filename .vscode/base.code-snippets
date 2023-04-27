@@ -1,18 +1,133 @@
 {
-	// Place your v3-vite-template 工作区 snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
-	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
-	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
-	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
-	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
-	// Placeholders with the same ids are connected.
-	// Example:
-	// "Print to console": {
-	// 	"scope": "javascript,typescript",
-	// 	"prefix": "log",
-	// 	"body": [
-	// 		"console.log('$1');",
-	// 		"$2"
-	// 	],
-	// 	"description": "Log output to console"
-	// }
+  // Place your v3-vite-template 工作区 snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+  // Placeholders with the same ids are connected.
+  // Example:
+  // "Print to console": {
+  // 	"scope": "javascript,typescript",
+  // 	"prefix": "log",
+  // 	"body": [
+  // 		"console.log('$1');",
+  // 		"$2"
+  // 	],
+  // 	"description": "Log output to console"
+  // }
+  "getFormConfig": {
+    "prefix": "form",
+    "scope": "javascript,typescript,vue",
+    "body": [
+      "export const getFormConfig = () => ({",
+      "  formItems: [],",
+      "  formAttr: {},",
+      "  colLayout: {",
+      "    xl: 4, // ≥1920px",
+      "    lg: 4, // ≥1200px",
+      "    md: 6, // ≥992px",
+      "    sm: 24, // ≥768px",
+      "    xs: 24 //",
+      "  },",
+      "  cusName: 'searchForm',",
+      "  formINjectionKey: 'formINjectionKey'",
+      "})"
+    ],
+    "description": "getFormConfig"
+  },
+  "FormItem": {
+    "prefix": "finput",
+    "scope": "javascript,typescript,vue",
+    "body": [
+      "{",
+      "      field: '$0',",
+      "      type: 'input',",
+      "      default: '1',",
+      "      itemsAttr: {",
+      "        label: '$1',",
+      "        labelWidth: '',",
+      "        rules: []",
+      "      },",
+      "      slotAttr: {",
+      "        placeholder: '$1',",
+      "        size: 'default',",
+      "        insideSlot: [",
+      "          {",
+      "            slot: 'append',",
+      "            value: '搜索'",
+      "          }",
+      "        ]",
+      "      }",
+      "    },"
+    ],
+    "description": "FormItem"
+  },
+  "FormItem1": {
+    "prefix": "fdatepicker",
+    "body": [
+      "{",
+      "      field: 'createTime',",
+      "      type: 'date-picker',",
+      "      itemsAttr: {",
+      "        label: '',",
+      "        labelWidth: '30',",
+      "        rules: []",
+      "      },",
+      "      colLayout: {",
+      "        xl: 6, // ≥1920px",
+      "        lg: 9, // ≥1200px",
+      "        md: 12, // ≥992px",
+      "        sm: 24, // ≥768px",
+      "        xs: 24",
+      "      },",
+      "      slotAttr: {",
+      "        type: 'daterange',",
+      "        'range-separator': '至',",
+      "        'start-placeholder': '请选择',",
+      "        'end-placeholder': '请选择',",
+      "        'value-format': 'YYYY-MM-DD HH:mm:ss'",
+      "      }",
+      "    },"
+    ],
+    "description": "FormItem"
+  },
+  "radiogroup": {
+    "prefix": "fradiogroup",
+    "body": [
+      "{",
+      "      field: '$0',",
+      "      type: 'radio-group',",
+      "      itemsAttr: {",
+      "        label: '',",
+      "        labelWidth: '90',",
+      "        rules: []",
+      "      },",
+      "      default: '1',",
+      "      slotAttr: {",
+      "        placeholder: '',",
+      "        size: 'default'",
+      "      },",
+      "      children: [",
+      "        {",
+      "          type: 'radio-button',",
+      "          slotAttr: {",
+      "            label: '',",
+      "            value: '1'",
+      "          }",
+      "        },",
+      "        {",
+      "          type: 'radio-button',",
+      "          slotAttr: {",
+      "            label: '',",
+      "            value: '3'",
+      "          },",
+      "          events: {",
+      "            change: () => {}",
+      "          }",
+      "        }",
+      "      ]",
+      "    },"
+    ],
+    "description": "radiogroup"
+  }
 }

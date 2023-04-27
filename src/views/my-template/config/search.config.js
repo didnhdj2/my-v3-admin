@@ -26,6 +26,8 @@ colLayout: 统一 布局配置
 }
 ******/
 
+import { formItemProps } from 'element-plus'
+
 // 顶部搜索栏配置
 export const getSearchConfig = () => ({
   formItems: [
