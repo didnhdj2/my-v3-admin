@@ -12,58 +12,12 @@
       </base-form>
     </div>
     <!-- 表格 -->
-    <!-- <base-table :listData="listData" v-bind="contentTableConfig">
-      <template #dataSet="{ row }">
-        <el-popover placement="bottom-end" :width="610" trigger="hover">
-          <template #reference><span class="color-3c">查看详情</span></template>
-          <div>
-            <span>订单来源:</span>
-            <span>{{ row.source }}</span>
-          </div>
-        </el-popover>
-      </template>
-      <template #enableWarn="{ row }">
-        <el-switch
-          v-model="row.enableWarn"
-          active-text="开"
-          inactive-text="关"
-          :before-change="
-            () => {
-              beforeChange({ id: row.id, enableWarn: !row.enableWarn })
-            }
-          "
-        ></el-switch>
-      </template>
-      <template #handler="{ row }">
-        <el-button type="danger" @click="deleteItem(row.id)">删除</el-button>
-        <el-button type="danger" @click="handleStart(row, false)">编辑</el-button>
-        <el-button type="success" @click="handleStart(row)">{{ row.state == 1 ? '开始' : '完结' }}</el-button>
-      </template>
-    </base-table> -->
-    <!-- 分页 -->
-    <!-- <div class="mb-10 fr f-je" v-if="pageTotal > 1">
-      <el-pagination
-        v-model:current-page="params.pageNo"
-        v-model:page-size="params.pageSize"
-        :page-sizes="[10, 20, 30]"
-        :layout="'total,  prev, pager, next,'"
-        :page-count="pageTotal"
-      ></el-pagination>
-    </div> -->
-
-    <!-- t弹窗 -->
-    <!-- <my-modal ref="modal" :modalConfig="mConfig" :modalAttr="modalAttr" :pageName="pageName" @handleRest="handleRest" @finish="addFinish">
-      <template #price>
-        <el-input v-model="formData.price" class="w-350" placeholder="请输入订单单价" @input="handleInputChange" />
-      </template>
-      <template #payAmount>
-        <el-input v-model="formData.payAmount" class="w-350" placeholder="请输入收款金额" @input="handleInputChange" />
-      </template>
-    </my-modal> -->
+    <edit-table :listData="listData" v-bind="contentTableConfig" class="h_40" ref="table"></edit-table>
   </div>
 </template>
 
 <script setup>
+import data from './page.json'
 import { onBeforeUnmount, ref } from 'vue'
 import { getModalConfig, getTableConfig, getSearchConfig } from './config'
 import { onGoList, edit, remove } from '@/https/apis/dy-tool/fans-monitor'
@@ -73,7 +27,8 @@ import { regFenToYuan } from '@/utils'
 const pageName = 'user/douyin/monitor'
 // ===========表格=====start=====
 
-const listData = ref([])
+// const listData = ref([])
+const listData = ref(data.data)
 const { ...contentTableConfig } = getTableConfig()
 
 /*******
@@ -146,7 +101,6 @@ async function deleteItem(id) {
   let res = await remove([id])
   if (res.code == 0) {
     ElMessage.success('删除成功！')
-  } else {
     ElMessage.error(res.message || '删除失败！')
   }
   startGetDataLoop()
@@ -157,16 +111,8 @@ async function deleteItem(id) {
  * @ param {*} data
  * @ return {*}
  ******/
-function handleStart(data, isStart = true) {
-  if (data.state == 1) {
-    handleEdit({
-      id: data.id,
-      state: 3
-    })
-  } else if (data.state == 3) {
-    submitData(data, isStart)
-  }
-  // submitData(data)
+function handleStart(data) {
+  table.value.editRow(data.id)
 }
 // ===========表格====end========
 
@@ -263,10 +209,11 @@ function addFinish() {
   getDataList()
 }
 
-console.log('===============form================')
 const searchConfig = getSearchConfig()
 
 function handleSubmit() {}
+
+const table = ref(null)
 </script>
 
 <style lang="scss" scoped>

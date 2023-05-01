@@ -1,0 +1,39 @@
+$color-list: red #F50537, black #000000, cc #cccccc, 33 #333333, 66 #666666, 99 #999999, 4d #4d4d4d,
+  white #ffffff, 80 #808080, 3c #3c8dbc, ea #eaedf1;
+
+
+.success {
+  color: var(--el-color-success);
+}
+
+.danger {
+  color: var(--el-color-danger);
+}
+
+.warning {
+  color: var(--el-color-warning);
+}
+
+.info {
+  color: var(--el-color-info);
+}
+
+.primary {
+  color: var(--el-color-primary);
+}
+
+// color
+@each $n ,
+$c in $color-list {
+  .color {
+    &-#{"" + $n} {
+      color: #{$c};
+    }
+  }
+
+  .bg {
+    &-#{"" + $n} {
+      background-color: #{$c};
+    }
+  }
+}

@@ -20,7 +20,7 @@
 18、scroll- y overflow-y: scroll; -x overflow-x: scroll;
 19、br- num圆角  b-num底部圆角  t-num 顶部圆角  6-32
 */
-
+@import './color.scss';
 
 @for $index from 1 through 5 {
   .line-#{$index} {
@@ -39,25 +39,6 @@
 
 .box-s {
   box-sizing: border-box;
-}
-
-$color-list: red #F50537, black #000000, cc #cccccc, 33 #333333, 66 #666666, 99 #999999, 4d #4d4d4d,
-  white #ffffff, 80 #808080, 3c #3c8dbc, ea #eaedf1;
-
-// color
-@each $n ,
-$c in $color-list {
-  .color {
-    &-#{"" + $n} {
-      color: #{$c};
-    }
-  }
-
-  .bg {
-    &-#{"" + $n} {
-      background-color: #{$c};
-    }
-  }
 }
 
 .fr {
@@ -335,6 +316,44 @@ $dire: s flex-start, e flex-end, c center, b baseline, st stretch;
 
   &_10 {
     width: 10%;
+  }
+}
+
+.h {
+  &_100 {
+    height: 100vh;
+  }
+
+  &_80 {
+    height: 80vh;
+  }
+
+  &_70 {
+    height: 70vh;
+  }
+
+  &_60 {
+    height: 60vh;
+  }
+
+  &_50 {
+    height: 50vh;
+  }
+
+  &_40 {
+    height: 40vh;
+  }
+
+  &_30 {
+    height: 30vh;
+  }
+
+  &_20 {
+    height: 20vh;
+  }
+
+  &_10 {
+    height: 10vh;
   }
 }
 
