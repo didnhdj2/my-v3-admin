@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, inject } from 'vue'
+import { ref, inject, nextTick } from 'vue'
 const props = defineProps({
   formItems: {
     type: Array,
@@ -127,7 +127,7 @@ function regitFunc() {
  * @ description: 提交表单，返回校验后的数据
  * @ return {*}
  ******/
-const emits = defineEmits(['submit'])
+const emits = defineEmits(['handleFunc'])
 async function submit() {
   let res = await baseForm.value.validate()
   if (res) {
@@ -217,6 +217,7 @@ function regitFomatter() {
  * @ return {*}
  ******/
 function reset(isInit, extraField = {}) {
+  console.log('===123=reset==', 123)
   props.formItems.forEach((item) => {
     if (!(item.field in extraField)) {
       formData.value[item.field] = item.default || ''
@@ -254,10 +255,12 @@ function updateData(data, excludeList = []) {
  * @ description 通过依赖注入的方式导出方法,可以跨组件调用
  * @ return {*}
  ******/
-if (props.injectionKey) {
-  const injectForm = inject(props.injectionKey, null)
+
+if (props.formINjectionKey) {
+  const injectForm = inject(props.formINjectionKey, null)
   injectForm && injectForm({ clearValidate, submit, reset, updateData, fetchData, regitFomatter, regitFunc, validateField })
 }
+
 //导出方法，只能父组件调用
 defineExpose({ reset, clearValidate, submit, updateData, fetchData, regitFomatter, regitFunc, validateField })
 </script>

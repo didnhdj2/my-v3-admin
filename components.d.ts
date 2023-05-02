@@ -9,7 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    BaseForm: typeof import('./src/components/baseForm/index.vue')['default']
+    BaseForm: typeof import('./src/components/baseForm/baseForm.vue')['default']
     BaseTable: typeof import('./src/components/baseTable/baseTable.vue')['default']
     BaseUpload: typeof import('./src/components/baseUpload/baseUpload.vue')['default']
     EditCell: typeof import('./src/components/baseTable/editCell.vue')['default']

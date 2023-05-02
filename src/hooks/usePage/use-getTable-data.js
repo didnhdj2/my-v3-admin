@@ -8,8 +8,9 @@ import { unref, ref, watchEffect, isRef } from 'vue'
  * @ return {*}
  ******/
 
-export async function useDataList(url, param, callback) {
+export function useDataList(url, param, callback) {
   let listData = ref([])
+
   async function getDataList() {
     const res = await getByUrl(unref(url), unref(param))
     if (res.code == 0) {
@@ -17,10 +18,11 @@ export async function useDataList(url, param, callback) {
     }
     callback && callback(res)
   }
-  if (isRef(url) || isRef(param)) {
-    watchEffect(getDataList)
-  } else {
-    getDataList()
-  }
-  return listData
+
+  // if (isRef(url) || isRef(param)) {
+  //   watchEffect(getDataList)
+  // } else {
+  //   getDataList()
+  // }
+  return { listData, getDataList }
 }
