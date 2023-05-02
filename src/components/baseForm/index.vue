@@ -19,8 +19,8 @@
                   <component
                     :is="item.isCus ? item.type : `el-${item.type}`"
                     v-model="formData[`${item.field}`]"
-                    v-bind="item.slotAttr"
                     :disabled="disabled || item.disabled"
+                    v-bind="item.slotAttr"
                     v-on="functionDict[item.field] || {}"
                   >
                     <!-- insideSlot必然存在，没有传入则为空数组 -->

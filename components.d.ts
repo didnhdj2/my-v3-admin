@@ -9,19 +9,13 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    2: typeof import('./src/components/editTable/editInputCell copy 2.vue')['default']
-    3: typeof import('./src/components/editTable/editInputCell copy 3.vue')['default']
     BaseForm: typeof import('./src/components/baseForm/index.vue')['default']
-    BaseTable: typeof import('./src/components/baseTable/index.vue')['default']
-    copy: typeof import('./src/components/editTable/editInputCell copy.vue')['default']
-    EditCell: typeof import('./src/components/editTable/editCell.vue')['default']
-    EditDatePickerCell: typeof import('./src/components/editTable/editDatePickerCell.vue')['default']
-    EditInputCell: typeof import('./src/components/editTable/editInputCell.vue')['default']
-    EditSelectCell: typeof import('./src/components/editTable/editSelectCell.vue')['default']
-    EditSwitchCell: typeof import('./src/components/editTable/editSwitchCell.vue')['default']
-    EditTable: typeof import('./src/components/editTable/index.vue')['default']
+    BaseTable: typeof import('./src/components/baseTable/baseTable.vue')['default']
+    BaseUpload: typeof import('./src/components/baseUpload/baseUpload.vue')['default']
+    EditCell: typeof import('./src/components/baseTable/editCell.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElContainer: typeof import('element-plus/es')['ElContainer']

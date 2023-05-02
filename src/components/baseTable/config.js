@@ -2,118 +2,142 @@
 /*******
 tableItems:[] {Array} 表头配置
 需要特殊处理的slot,formatter配置将不起作用
+import
  ******/
-export const getTableConfig = ({ handleSelectionChange }) => ({
+import { h } from 'vue'
+export const getTableConfig = () => ({
   // 表头配置
   tableItems: [
     {
-      type: 'selection', //
-      label: '选择'
-    },
-    {
       type: 'index', //index
-      label: '序号'
+      label: '序号',
+      minWidth: '55',
+      align: 'center',
+      fixed: 'left'
     },
     {
       //所有el-table-column的属性都可以配置
-      label: '网盘编号',
-      prop: 'menu_no',
-      //slotName: 'role', //需要特殊处理的slot,formatter配置将不起作用
-      align: 'center',
+      label: '抖音号',
+      prop: 'unionId',
+      align: 'left',
       // width: '80',
-      minWidth: '80',
+      minWidth: '110',
+      showOverflowTooltip: true,
       class: '',
       fixed: null,
       visible: true
     },
     {
-      label: '网盘',
-      prop: 'pan',
-      align: 'center',
+      label: '预警',
+      prop: 'warning',
+      formatter: (a, b, c) => {
+        if (!c) {
+          return h(
+            ElTag,
+            {
+              class: 'ml-2',
+              type: 'success'
+            },
+            { default: () => '安全' }
+          )
+        } else {
+          return h(
+            ElTag,
+            {
+              class: 'ml-2',
+              type: 'danger'
+            },
+            {
+              default: () => '预警'
+            }
+          )
+        }
+      },
+      align: 'left',
+      // width: '80',
+      minWidth: '80',
+      class: '',
+      visible: true
+    },
+    {
+      label: '昵称',
+      prop: 'nickname',
+      align: 'left',
       // width: '80',
       showOverflowTooltip: true, //超过了一行显示省略号，鼠标移动到上面显示全部内容
-      minWidth: '80',
+      minWidth: '110',
       class: '',
-      visible: true
+      visible: true,
+      editable: true,
+      editItem: {}
     },
     {
-      label: '路径',
-      prop: 'path',
-      align: 'center',
-      width: '160',
-      minWidth: '80',
+      label: '初始粉丝数',
+      prop: 'oldFansNum',
+      align: 'left',
+      minWidth: '140',
       class: '',
-      visible: true
+      visible: true,
+      editable: true,
+      editItem: {
+        type: 'input',
+        formatter: (val) => val * 10,
+        parser: (val) => val / 10
+      }
     },
     {
-      label: '目录',
-      prop: 'menu',
-      align: 'center',
+      label: '当前粉丝数',
+      prop: 'currentFansNum',
+      align: 'left',
       // width: '80',
-      minWidth: '80',
+      minWidth: '140',
       class: '',
-      visible: true
-    },
-    {
-      label: '显示状态',
-      prop: 'isShow',
-      slotName: 'state',
-      align: 'center',
-      // width: '80',
-      minWidth: '80',
-      class: '',
-      visible: true
-    },
-    {
-      label: '排序',
-      prop: 'sort',
-      align: 'center',
-      // width: '80',
-      minWidth: '80',
-      class: '',
-      visible: true
-    },
-    {
-      label: '更新时间',
-      prop: 'date',
-      align: 'center',
-      // width: '80',
-      minWidth: '80',
-      class: '',
-      visible: true
-    },
-    {
-      label: '操作',
-      prop: 'operations', //
-      align: 'center',
-      slotName: 'handler',
-      width: '280',
-      minWidth: '80',
-      class: '',
-      fixed: 'right',
-      visible: true
+      visible: true,
+      editable: true,
+      editItem: {
+        type: 'select',
+        attrs: {},
+        children: [
+          {
+            type: 'option',
+            attrs: {
+              label: 'item.label',
+              value: 'item.value'
+            },
+            disabled: false
+          }
+        ]
+      }
     }
   ],
   // 表格属性 所有el-table的属性都可以配置
   tableAttr: {
-    border: true
+    border: true,
+    'show-header': true
   },
-  tableMethod: {
-    select: (selection, row) => {
-      console.log('===selection, row===', selection, row)
+  tableMethod: {},
+  editableLine: true,
+  btnSlot: {
+    item: {
+      label: '操作',
+      prop: 'operations',
+      align: 'center',
+      width: '160',
+      minWidth: '80',
+      class: '',
+      fixed: 'right'
     },
-    'selection-change': handleSelectionChange
-  },
-
-  // 页脚配置
-  footer: {
-    className: ['fr f-jsb mt-30'],
-    show: true,
-    //pageSizes: [], //每页显示条数
-    layout: '', // 'total, sizes, prev, pager, next, jumper'
-    pageAttrs: {
-      'prev-text': '上一页',
-      'next-text': '下一页'
-    }
+    btnArr: [
+      {
+        attr: {
+          btnText: '操作1',
+          type: 'success',
+          class: 'ml-6'
+        },
+        onClick: (val1, val2) => {
+          console.log(val1, val2)
+        }
+      }
+    ]
   }
 })

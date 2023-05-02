@@ -4,7 +4,6 @@ tableItems:[] {Array} 表头配置
 需要特殊处理的slot,formatter配置将不起作用
 import
  ******/
-import { regFenToYuan } from '@/utils'
 import { h } from 'vue'
 export const getTableConfig = () => ({
   // 表头配置
@@ -70,7 +69,7 @@ export const getTableConfig = () => ({
       class: '',
       visible: true,
       editable: true,
-      slotName: 'nickname'
+      editItem: {}
     },
     {
       label: '初始粉丝数',
@@ -80,7 +79,11 @@ export const getTableConfig = () => ({
       class: '',
       visible: true,
       editable: true,
-      slotName: 'oldFansNum'
+      editItem: {
+        type: 'input',
+        formatter: (val) => val * 10,
+        parser: (val) => val / 10
+      }
     },
     {
       label: '当前粉丝数',
@@ -91,24 +94,49 @@ export const getTableConfig = () => ({
       class: '',
       visible: true,
       editable: true,
-      slotName: 'currentFansNum'
+      editItem: {
+        type: 'select',
+        attrs: {},
+        children: [
+          {
+            type: 'option',
+            attrs: {
+              label: 'item.label',
+              value: 'item.value'
+            },
+            disabled: false
+          }
+        ]
+      }
     }
-    // {
-    //   label: '操作',
-    //   prop: 'operations', //
-    //   align: 'center',
-    //   slotName: 'handler',
-    //   width: '160',
-    //   minWidth: '80',
-    //   class: '',
-    //   // fixed: 'right',
-    //   visible: true
-    // }
   ],
   // 表格属性 所有el-table的属性都可以配置
   tableAttr: {
     border: true,
     'show-header': true
   },
-  tableMethod: {}
+  tableMethod: {},
+  editableLine: true,
+  btnSlot: {
+    item: {
+      label: '操作2',
+      align: 'center',
+      width: '160',
+      minWidth: '80',
+      class: '',
+      fixed: 'right'
+    },
+    btnArr: [
+      {
+        attr: {
+          btnText: '操作1',
+          type: 'success',
+          class: 'ml-6'
+        },
+        onClick: (val1, val2) => {
+          console.log(val1, val2)
+        }
+      }
+    ]
+  }
 })
