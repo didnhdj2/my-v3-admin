@@ -1,6 +1,6 @@
 <template>
   <!-- 有数据 -->
-  <div v-if="listData.length > 0">
+  <div class="mt-10">
     <el-table :data="listData" style="width: 100%" v-bind="tableAttr" v-on="tableMethod">
       <template v-for="propItem in tableItems" :key="propItem.prop + propItem.type">
         <el-table-column v-bind="propItem">
@@ -44,8 +44,8 @@
                 v-for="btn in btnSlot.btnArr"
                 v-bind="btn.attr"
                 @click="
-                  (val) => {
-                    btn.onClick(val, row)
+                  () => {
+                    btn.onClick(row)
                   }
                 "
               >

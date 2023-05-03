@@ -3,31 +3,27 @@ import { useDataList } from './use-getTable-data'
 import { useSearchData } from './use-search-data'
 import { useModalData } from './use-add-edit-data'
 
-function usePageData(getTableConfig, getSearchConfig) {
+function usePageData({ urlMap, searchConfig, modalConfig }) {
   /* ===========表头搜索=====start===== */
-  const searchConfig = getSearchConfig()
-  const funcDict = useFormFuncInject(searchConfig.formINjectionKey)
-  const { submit, reset, params } = useSearchData(funcDict)
-
+  const formFuncDict = useFormFuncInject(searchConfig.formInjectionKey)
+  const { submit: formSubmit, reset: formReset, params } = useSearchData(formFuncDict)
   /* ===========表格=====start===== */
-  const { listData } = useDataList('1231', params)
-  const { ...contentTableConfig } = getTableConfig()
-
-  function handleUpdate(data) {
-    console.log('====handleUpdate====', data.id)
-  }
-
+  const { listData, remove, total } = useDataList(urlMap, params)
   /* ===========表单=====start===== */
+  const modalFuncDict = useFormFuncInject(modalConfig.formInjectionKey)
+  const { init: initForm, modal, submit: modalSubmit, handleUpdate } = useModalData(params, modalFuncDict, urlMap)
 
   return {
-    searchConfig,
-    funcDict,
-    submit,
-    reset,
+    formSubmit,
+    formReset,
     params,
     listData,
-    contentTableConfig,
-    handleUpdate
+    remove,
+    total,
+    initForm,
+    modalSubmit,
+    handleUpdate,
+    modal
   }
 }
 

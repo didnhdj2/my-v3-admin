@@ -28,7 +28,7 @@ formAttr 表单属性,（除了ref 和 model外，其他均可配置）具体htt
 itemStyle   表单子项的统一样式，绑定到formItem的style上，也可以在formItems中单独配置
 colLayout: 统一 布局配置
 modalAttr
-injectionKey: 'formINjectionKey'  //依赖注入的key
+formInjectionKey: 'formInjectionKey'  //依赖注入的key
 }
 ******/
 

@@ -11,16 +11,17 @@ const param = {
   pageSize: 10
 }
 export function useSearchData(funcDict) {
-  let params = ref({})
+  let params = ref({
+    pageNo: 1,
+    pageSize: 10
+  })
 
-  async function submit() {
-    const data = await funcDict.value.submit()
+  async function submit(data) {
     params.value = Object.assign({}, param, data)
   }
 
   function reset() {
-    funcDict.value.reset()
-    params.value = param
+    params.value = { ...param }
   }
   return { submit, reset, params }
 }

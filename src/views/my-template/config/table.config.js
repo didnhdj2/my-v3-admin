@@ -5,7 +5,7 @@ tableItems:[] {Array} 表头配置
 import
  ******/
 import { h } from 'vue'
-export const getTableConfig = () => ({
+export const getTableConfig = ({ remove }) => ({
   // 表头配置
   tableItems: [
     {
@@ -129,14 +129,18 @@ export const getTableConfig = () => ({
     btnArr: [
       {
         attr: {
-          btnText: '操作1',
-          type: 'success',
+          btnText: '删除',
+          type: 'danger',
           class: 'ml-6'
         },
-        onClick: (val1, val2) => {
-          console.log(val1, val2)
-        }
+        onClick: remove
       }
     ]
+  },
+  paginationConfig: {
+    'page-sizes': [10, 20, 50, 100],
+    small: 'small',
+    background: true,
+    layout: 'total, sizes, prev, pager, next, jumper'
   }
 })

@@ -2,7 +2,7 @@
   <div class="my-modal">
     <el-dialog :title="title" v-model="dialogVisible" v-bind="modalAttr" @close="handleClose">
       <base-form v-bind="$attrs" ref="myModal">
-        <template v-for="item in slotArr" :key="item.field" #[item.field]>
+        <template v-for="item in slotArr($attrs)" :key="item.field" #[item.field]>
           <slot :name="item.field"></slot>
         </template>
       </base-form>
@@ -19,7 +19,6 @@
 </template>
 
 <script setup>
-import baseForm from '@/components/baseForm'
 import { computed, nextTick, ref } from 'vue'
 
 const props = defineProps({
@@ -38,27 +37,36 @@ const emit = defineEmits(['handleClose'])
 
 const dialogVisible = ref(false)
 const myModal = ref(null)
+
+/*******
+ * @ description: 暴露给父组件的插槽数组
+ * @ param {*}
+ * @ return {*}
+ ******/
 const slotArr = computed(() => {
-  return props.modalConfig.formItems.reduce((preArr, item) => {
-    if (item.slotArr && item.slotArr.insideSlot && item.slotArr.insideSlot.length) {
-      item.slotArr.insideSlot.forEach((element) => {
-        if (element.name) {
-          preArr.push(element.name)
-        }
-      })
-    }
-    if (item.type == 'slot' || item.type == 'oSlot') {
-      preArr.push(item.field)
-    }
-  }, [])
+  return (attrs) => {
+    return attrs.formItems.reduce((preArr, item) => {
+      if (item.slotArr && item.slotArr.insideSlot && item.slotArr.insideSlot.length) {
+        item.slotArr.insideSlot.forEach((element) => {
+          if (element.name) {
+            preArr.push(element.name)
+          }
+        })
+      }
+      if (item.type == 'slot' || item.type == 'oSlot') {
+        preArr.push(item.field)
+      }
+      return preArr
+    }, [])
+  }
 })
-// 点击原来的按钮触发事件
+
 /*******
  * @ description: 提交表单
  * @ return {*}
  ******/
 function handleConfirmClick() {
-  myModal.value.submit()
+  myModal.value && myModal.value.submit()
 }
 // 关闭表单
 function close() {
@@ -71,7 +79,7 @@ function close() {
  * @ return {*}
  ******/
 function handleClose() {
-  myModal.value.reset()
+  myModal.value && myModal.value && myModal.value.reset()
   emit('handleClose')
 }
 
@@ -97,7 +105,7 @@ function init(data, cus_title) {
   }
   // 解包回显参数
   nextTick(() => {
-    myModal.value.updateData({ ...saveData })
+    myModal.value && myModal.value.updateData({ ...saveData })
   })
 }
 

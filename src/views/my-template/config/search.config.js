@@ -26,8 +26,6 @@ colLayout: 统一 布局配置
 }
 ******/
 
-import { formItemProps } from 'element-plus'
-
 // 顶部搜索栏配置
 export const getSearchConfig = () => ({
   formItems: [
@@ -41,7 +39,6 @@ export const getSearchConfig = () => ({
       },
       slotAttr: {
         placeholder: '请输入抖音号',
-        size: 'default',
         insideSlot: [
           {
             slot: 'append',
@@ -58,25 +55,23 @@ export const getSearchConfig = () => ({
         labelWidth: '90',
         rules: []
       },
-      default: '1',
+      divNode: { class: 'fc ' },
+      default: '抖音号',
       slotAttr: {
-        placeholder: '请输入抖音号',
-        size: 'default'
+        placeholder: '请输入抖音号'
       },
       children: [
         {
           type: 'radio-button',
           slotAttr: {
-            label: '抖音号',
-            value: '1'
+            label: '抖音号'
           }
         },
 
         {
           type: 'radio-button',
           slotAttr: {
-            label: '快手号',
-            value: '3'
+            label: '快手号'
           },
           events: {
             change: () => {}
@@ -110,7 +105,6 @@ export const getSearchConfig = () => ({
   ],
   formAttr: {
     labelWidth: '100px',
-    size: 'default',
     'validate-on-rule-change': false
   },
   // itemStyle: {},
@@ -122,5 +116,6 @@ export const getSearchConfig = () => ({
     xs: 24 //
   },
   cusName: 'searchForm',
-  formINjectionKey: 'formINjectionKey'
+  formInjectionKey: 'formInjectionKey',
+  showBtn: true
 })

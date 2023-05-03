@@ -1,5 +1,6 @@
-import { getByUrl } from '@/https/apis/general'
+import { getByUrl, postByUrl } from '@/https/apis/general'
 import { unref, ref, watchEffect, isRef } from 'vue'
+import { ElMessage } from 'element-plus'
 /*******
  * @ description:获取数据列表
  * @ param {*} url
@@ -8,23 +9,51 @@ import { unref, ref, watchEffect, isRef } from 'vue'
  * @ return {*}
  ******/
 
-export function useDataList(url, param, callback) {
+export function useDataList(urlMap, params, callback) {
   let listData = ref([])
-
+  const total = ref(15)
+  /*******
+   * @ description: 请求数据
+   * @ return {*}
+   ******/
   async function getDataList() {
-    console.log('===url===', unref(url))
-    console.log('===param===', unref(param))
-    // const res = await getByUrl(unref(url), unref(param))
-    // if (res.code == 0) {
-    //   listData.value = res.data
-    // }
-    // callback && callback(res)
+    const _params = unref(params)
+    delete _params.trigger
+    const res = await getByUrl(urlMap.list, _params)
+    if (callback) {
+      // 传入回调函数
+      callback && callback(res)
+    } else if (res.code == 0) {
+      // 不传入回调函数，解析给默认
+      listData.value = res.data
+      total.value = res.total
+    }
   }
 
-  if (isRef(url) || isRef(param)) {
+  async function remove(data) {
+    const param = unref(data)
+    const res = await postByUrl(urlMap.delete, [param.id])
+    if (res.code == 0) {
+      ElMessage({
+        message: res.data.message || '删除成功',
+        type: 'success',
+        duration: 5 * 1000
+      })
+      // 触发刷新
+      params.value.trigger = Symbol()
+    } else {
+      ElMessage({
+        message: res.data.message || 'Error',
+        type: 'error',
+        duration: 5 * 1000
+      })
+    }
+  }
+
+  if (isRef(params)) {
     watchEffect(getDataList)
   } else {
     getDataList()
   }
-  return { listData, getDataList }
+  return { listData, remove, total }
 }

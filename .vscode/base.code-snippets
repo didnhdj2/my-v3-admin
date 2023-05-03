@@ -30,7 +30,7 @@
       "    xs: 24 //",
       "  },",
       "  cusName: 'searchForm',",
-      "  formINjectionKey: 'formINjectionKey'",
+      "  formInjectionKey: 'formInjectionKey'",
       "})"
     ],
     "description": "getFormConfig"

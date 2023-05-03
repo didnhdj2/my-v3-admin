@@ -50,6 +50,14 @@
           </template>
           <!-- </el-col> -->
         </template>
+        <el-form-item>
+          <slot name="btns">
+            <div class="fr" v-if="showBtn">
+              <el-button type="primary" @click="submit">查询</el-button>
+              <el-button @click="formReset">重置</el-button>
+            </div>
+          </slot>
+        </el-form-item>
       </div>
     </el-form>
   </div>
@@ -83,7 +91,7 @@ const props = defineProps({
     default: () => [],
     desc: '不在表单中的，回显时需要包含的额外字段'
   },
-  formINjectionKey: {
+  formInjectionKey: {
     desc: '表单注入的key',
     type: String,
     required: true
@@ -92,6 +100,11 @@ const props = defineProps({
     desc: '表单的自定义名称',
     type: String,
     required: true
+  },
+  showBtn: {
+    desc: '是否显示按钮',
+    type: Boolean,
+    default: false
   }
 })
 
@@ -127,11 +140,12 @@ function regitFunc() {
  * @ description: 提交表单，返回校验后的数据
  * @ return {*}
  ******/
-const emits = defineEmits(['handleFunc'])
+const emits = defineEmits(['handleFunc', 'submit'])
 async function submit() {
   let res = await baseForm.value.validate()
   if (res) {
     let newObj = fetchData()
+    emits('submit', newObj)
     return newObj
   }
 }
@@ -217,7 +231,6 @@ function regitFomatter() {
  * @ return {*}
  ******/
 function reset(isInit, extraField = {}) {
-  console.log('===123=reset==', 123)
   props.formItems.forEach((item) => {
     if (!(item.field in extraField)) {
       formData.value[item.field] = item.default || ''
@@ -232,6 +245,10 @@ function reset(isInit, extraField = {}) {
 }
 reset(true)
 
+function formReset() {
+  reset()
+  emits('reset')
+}
 /*******
  * @ description: 回显表单数据
  * @ param {*} data
@@ -256,8 +273,8 @@ function updateData(data, excludeList = []) {
  * @ return {*}
  ******/
 
-if (props.formINjectionKey) {
-  const injectForm = inject(props.formINjectionKey, null)
+if (props.formInjectionKey) {
+  const injectForm = inject(props.formInjectionKey, null)
   injectForm && injectForm({ clearValidate, submit, reset, updateData, fetchData, regitFomatter, regitFunc, validateField })
 }
 
