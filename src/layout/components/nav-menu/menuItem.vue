@@ -21,9 +21,6 @@
 <script setup>
 import { ElMessage } from 'element-plus'
 import appLink from './appLink.vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useUserStore } from '@/store/user'
-const store = useUserStore()
 const props = defineProps({
   item: {
     type: Object,
@@ -35,10 +32,4 @@ function handleClick(item) {
     ElMessage.error('该功能正在开发中,敬请期待')
   }
 }
-const route = useRoute()
-const router = useRouter()
 </script>
-<style lang="scss" scoped>
-.main {
-}
-</style>

@@ -1,9 +1,10 @@
 <template>
+  <el-icon>
     <svg aria-hidden="true" class="svg-icon" :width="props.size" :height="props.size">
       <use :xlink:href="symbolId" :fill="props.color" />
     </svg>
-  </template>
-
+  </el-icon>
+</template>
 
 <script setup>
 import { computed } from 'vue'
@@ -23,5 +24,4 @@ const props = defineProps({
 })
 
 const symbolId = computed(() => `#${props.name}`)
-
 </script>

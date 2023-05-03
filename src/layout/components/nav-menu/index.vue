@@ -1,11 +1,11 @@
 <template>
   <div class="main">
-    <div class="h-50 logo fr f-ac pl-30 color-white fs-18 bg-3c">
-      <span>大熊助手</span>
+    <div class="h-50 lh-50 pl-30 color-white fs-18 bg-3c">
+      <span>{{ state ? '大熊助手' : '大熊' }}</span>
     </div>
-    <el-menu :default-active="currentPath" unique-opened>
+    <el-menu :default-active="route.path" unique-opened :collapse="!state" :collapse-transition="false">
       <template v-for="(item, index) in menuList" :key="item.path">
-        <subItem v-if="item.children && item.children.length > 0" :data="item" :key="item.path" @changePath="changePath"></subItem>
+        <subItem v-if="item.children && item.children.length > 0" :data="item" :key="item.path"></subItem>
         <template v-else>
           <menuItem v-if="!item.isHidden" :item="item" :key="item.path + index"></menuItem>
         </template>
@@ -17,16 +17,15 @@
 <script setup>
 import menuItem from './menuItem.vue'
 import subItem from './subItem.vue'
-import { ref, watch, computed } from 'vue'
+import { watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUserStore } from '@/store/user'
 
 const store = useUserStore()
 const menuList = store.getMenu
 const route = useRoute()
-const tagsViews = computed(() => store.tagsViewArr)
-const currentPath = ref(route.path)
-
+const state = computed(() => store.isCollapse)
+store.isCollapse = true
 watch(
   () => route.path,
   (val) => {
@@ -42,10 +41,6 @@ watch(
     immediate: true
   }
 )
-
-const changePath = (path) => {
-  currentPath.value = path
-}
 </script>
 <style lang="scss" scoped>
 .main {

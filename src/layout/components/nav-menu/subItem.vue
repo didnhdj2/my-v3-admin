@@ -20,20 +20,19 @@ const props = defineProps({
     required: true
   }
 })
-const emit = defineEmits(['changePath'])
 /*******
  * @ description: 点击子菜单时，跳转到子菜单的第一个页面
  * @ param {*} data
  * @ return {*}
  ******/
 const handleSubUrl = (e, data) => {
+  // 不跳转
   if (e.target.dataset?.menu != 1) {
     return
   }
+  // 有子菜单 且 子菜单不是开发中，跳转
   if (data.children && data.children.length > 0 && !data.children[0].isOnDevelop) {
     router.push({ path: data.children[0].path })
-    // 通知父组件切换激活菜单
-    emit('changePath', data.children[0].path)
   }
 }
 </script>

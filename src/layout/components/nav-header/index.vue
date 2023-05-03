@@ -1,8 +1,11 @@
 <template>
   <div>
     <div class="fr f-ac f-jsb pl-20 pr-50 h-50 bb bg-3c color-white">
-      <div>
-        <el-icon class="mr-18" size="28">
+      <div @click="handleFold">
+        <el-icon class="mr-18" size="28" v-if="state">
+          <Fold></Fold>
+        </el-icon>
+        <el-icon class="mr-18" size="28" v-else>
           <Expand></Expand>
         </el-icon>
       </div>
@@ -105,6 +108,15 @@ const user = computed(() => store.user.username)
 const balance = computed(() => store.user.fundInfo.balance)
 const Ycoin = computed(() => store.user.fundInfo.coin)
 const tagsViews = computed(() => store.tagsViewArr)
+const state = computed(() => store.isCollapse)
+
+/*******
+ * @ description: 菜单折叠
+ * @ return {*}
+ ******/
+function handleFold() {
+  store.setIsCollapse()
+}
 // TODO 1、购买套餐弹窗
 //  2、 生成二维码 vueQr <vue-qr  text="Hello world!" :size="200"></vue-qr>
 //  3、 轮询支付结果

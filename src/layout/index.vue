@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <el-container>
-      <el-aside class="bg-0" :width="state ? '160px' : '50px'">
+      <el-aside class="bg-0" :width="state ? '160px' : '70px'">
         <nav-menu></nav-menu>
       </el-aside>
       <el-container>
@@ -26,8 +26,10 @@
 import appMain from './components/app-main'
 import navHeader from './components/nav-header'
 import navMenu from './components/nav-menu'
-import { ref } from 'vue'
-const state = ref(true)
+import { ref, computed } from 'vue'
+import { useUserStore } from '@/store/user'
+const store = useUserStore()
+const state = computed(() => store.isCollapse)
 </script>
 
 <style lang="scss" scoped>
@@ -47,6 +49,11 @@ const state = ref(true)
   }
   .el-aside {
     --el-aside-color: black;
+    transition: width 0.1s;
+    -webkit-transition: width 0.1s;
+    -moz-transition: width 0.1s;
+    -webkit-transition: width 0.1s;
+    -o-transition: width 0.1s;
   }
 }
 </style>
