@@ -10,12 +10,6 @@
         </el-header>
         <el-main class="pos-r">
           <appMain></appMain>
-          <el-popover placement="left" :width="610" trigger="hover">
-            <template #reference>
-              <span class="color-3c"><svg-icon name="svg-feedback" size="40" class="pos-f icon-feedback"></svg-icon></span>
-            </template>
-          </el-popover>
-          <svg-icon name="svg-cus-server" size="40" class="pos-f icon-server"></svg-icon>
         </el-main>
       </el-container>
     </el-container>
@@ -26,7 +20,7 @@
 import appMain from './components/app-main'
 import navHeader from './components/nav-header'
 import navMenu from './components/nav-menu'
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useUserStore } from '@/store/user'
 const store = useUserStore()
 const state = computed(() => store.isCollapse)

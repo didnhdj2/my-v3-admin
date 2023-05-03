@@ -28,6 +28,7 @@
   </div>
 </template>
 <script setup>
+import data from './page'
 import { computed } from 'vue'
 import { paginationCommon } from '@/common/paginationConfig'
 import { getTableConfig, getSearchConfig, getModalConfig } from './config'
@@ -54,4 +55,7 @@ const { formSubmit, formReset, params, listData, remove, modal, total, initForm,
 })
 /* ===========表格=====start===== */
 const { paginationConfig, ...contentTableConfig } = getTableConfig({ remove })
+
+/* 模拟数据 */
+listData.value = data.data
 </script>

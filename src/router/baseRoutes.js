@@ -7,15 +7,5 @@ export const baseRoutes = [
       title: '首页',
       icon: 'svg-graph'
     }
-  },
-  {
-    path: 'password',
-    name: 'password',
-    isHidden: true,
-    component: '@/views/system/password/password',
-    meta: {
-      title: '修改密码',
-      icon: 'vg-key'
-    }
   }
 ]
