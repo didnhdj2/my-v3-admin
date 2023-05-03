@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     BaseForm: typeof import('./src/components/baseForm/baseForm.vue')['default']
+    BaseModal: typeof import('./src/components/baseModal/baseModal.vue')['default']
     BaseTable: typeof import('./src/components/baseTable/baseTable.vue')['default']
     BaseUpload: typeof import('./src/components/baseUpload/baseUpload.vue')['default']
     EditCell: typeof import('./src/components/baseTable/editCell.vue')['default']
@@ -43,12 +44,9 @@ declare module '@vue/runtime-core' {
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
-    MyForm: typeof import('./src/components/myForm/index.vue')['default']
-    MyModal: typeof import('./src/components/myModal/index.vue')['default']
-    MyTable: typeof import('./src/components/myTable/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SubView: typeof import('./src/components/subView/index.vue')['default']
-    SvgIcon: typeof import('./src/components/svgIcon/index.vue')['default']
+    SubView: typeof import('./src/components/subView/subView.vue')['default']
+    SvgIcon: typeof import('./src/components/svgIcon/svgIcon.vue')['default']
   }
 }

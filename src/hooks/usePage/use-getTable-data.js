@@ -12,17 +12,19 @@ export function useDataList(url, param, callback) {
   let listData = ref([])
 
   async function getDataList() {
-    const res = await getByUrl(unref(url), unref(param))
-    if (res.code == 0) {
-      listData.value = res.data
-    }
-    callback && callback(res)
+    console.log('===url===', unref(url))
+    console.log('===param===', unref(param))
+    // const res = await getByUrl(unref(url), unref(param))
+    // if (res.code == 0) {
+    //   listData.value = res.data
+    // }
+    // callback && callback(res)
   }
 
-  // if (isRef(url) || isRef(param)) {
-  //   watchEffect(getDataList)
-  // } else {
-  //   getDataList()
-  // }
+  if (isRef(url) || isRef(param)) {
+    watchEffect(getDataList)
+  } else {
+    getDataList()
+  }
   return { listData, getDataList }
 }

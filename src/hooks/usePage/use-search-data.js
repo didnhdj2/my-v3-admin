@@ -1,4 +1,4 @@
-import { unref, ref, watchEffect, isRef } from 'vue'
+import { ref } from 'vue'
 /*******
  * @ description:
  * @ param {*} url
@@ -13,13 +13,14 @@ const param = {
 export function useSearchData(funcDict) {
   let params = ref({})
 
-  function submit() {
-    const data = funcDict.value.submit()
-    params.value = data
+  async function submit() {
+    const data = await funcDict.value.submit()
+    params.value = Object.assign({}, param, data)
   }
 
   function reset() {
     funcDict.value.reset()
+    params.value = param
   }
   return { submit, reset, params }
 }

@@ -7,7 +7,7 @@ import { postByUrl, getByUrl } from '@/https/apis/general'
  * @ param {*} callback
  * @ return {*}
  ******/
-export function getDataList(url, param, callback) {
+export function useModalData(url, param, callback) {
   let listData = []
 
   return { listData }
