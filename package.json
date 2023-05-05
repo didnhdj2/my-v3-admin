@@ -13,7 +13,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.9",
     "axios": "^1.3.3",
-    "echarts": "^5.4.1",
+    "echarts": "^5.4.2",
     "element-plus": "^2.2.31",
     "mockjs": "^1.1.0",
     "nprogress": "0.2.0",
@@ -28,6 +28,7 @@
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
     "@vitejs/plugin-vue": "^4.0.0",
+    "css-allin-class": "^1.0.33",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-define-config": "1.2.0",
