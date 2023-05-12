@@ -1,5 +1,7 @@
 # vue3 版本的后台模板 使用 vite 构建
 
+[简体中文](./README.md) | [English Doc](./README.en.md)
+
 > 项目地址：https://e.coding.net/sopan/developer/v3-vite-template.git
 
 ## 特性
