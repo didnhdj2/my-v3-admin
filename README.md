@@ -37,7 +37,7 @@
 
 ![table](./src/assets/images/popup.png)
 
-更多内容见[详细配置](./src/components/baseModal/readme.md)
+更多内容见[详细配置](./src/components/baseModal/README.md)
 
 ### 3. baseTable
 
