@@ -29,7 +29,7 @@
 
 ![table](./src/assets/images/header.png)
 
-更多内容见[详细配置](./src/components/baseForm/README.md)
+更多内容见[详细配置](./src/components/baseForm/readme.md)
 
 ### 2. baseModal
 
@@ -37,7 +37,7 @@
 
 ![table](./src/assets/images/popup.png)
 
-更多内容见[详细配置](./src/components/baseModal/README.md)
+更多内容见[详细配置](./src/components/baseModal/readme.md)
 
 ### 3. baseTable
 
@@ -48,7 +48,7 @@
 - **灵活插槽** 支持定义表格单列插槽
   ![table](./src/assets/images/table.png)
 
-更多内容见[详细配置](./src/components/baseTable/README.md)
+更多内容见[详细配置](./src/components/baseTable/readme.md)
 
 ## 开发计划
 
