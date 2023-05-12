@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="h-50 lh-50 pl-30 color-white fs-18 bg-3c">
-      <span>{{ state ? '大熊助手' : '大熊' }}</span>
+      <span>{{ state ? 'myAdmin' : 'myAdmin' }}</span>
     </div>
     <el-menu :default-active="route.path" unique-opened :collapse="!state" :collapse-transition="false">
       <template v-for="(item, index) in menuList" :key="item.path">

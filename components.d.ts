@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BaseEchart: typeof import('./src/components/baseEchart/baseEchart.vue')['default']
     BaseForm: typeof import('./src/components/baseForm/baseForm.vue')['default']
     BaseModal: typeof import('./src/components/baseModal/baseModal.vue')['default']
     BasePagination: typeof import('./src/components/basePagination/basePagination.vue')['default']

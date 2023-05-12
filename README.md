@@ -2,7 +2,7 @@
 
 [简体中文](./README.md) | [English Doc](./README.en.md)
 
-> 项目地址：https://e.coding.net/sopan/developer/v3-vite-template.git
+> 项目地址：https://github.com/didnhdj2/my-v3-admin
 
 ## 特性
 
@@ -32,3 +32,7 @@ TODO:
 - [ ] 完善 hooks 抽取
 - [ ] 通用组件优化
 - [ ] store、utils、layout 优化
+
+![table](./src/assets/images/table.png)
+![table](./src/assets/images/popup.png)
+![table](./src/assets/images/header.png)
