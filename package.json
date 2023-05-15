@@ -2,7 +2,6 @@
   "name": "dytool",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite --mode dev",
     "build": "vite build --mode build",
@@ -28,7 +27,7 @@
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
     "@vitejs/plugin-vue": "^4.0.0",
-    "css-allin-class": "^1.0.33",
+    "all-in-class": "^0.0.1",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-define-config": "1.2.0",
