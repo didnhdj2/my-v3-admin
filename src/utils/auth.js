@@ -6,7 +6,7 @@ const UserKey = 'User-Info'
  * @ return {*}
  ******/
 export function getToken() {
-  return localStorage.getItem(TokenKey)
+  return localStorage.getItem(TokenKey) || '9527'
 }
 
 /*******

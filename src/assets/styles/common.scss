@@ -43,22 +43,22 @@
 
 .fr {
   display: flex;
-  flex-direction: row !important;
+  flex-direction: row;
 }
 
 .frr {
   display: flex;
-  flex-direction: row-reverse !important;
+  flex-direction: row-reverse;
 }
 
 .fc {
   display: flex;
-  flex-direction: column !important;
+  flex-direction: column;
 }
 
 .fcr {
   display: flex;
-  flex-direction: column-reverse !important;
+  flex-direction: column-reverse;
 }
 
 .fw {
@@ -359,15 +359,15 @@ $dire: s flex-start, e flex-end, c center, b baseline, st stretch;
 
 .pos {
   &-r {
-    position: relative !important;
+    position: relative;
   }
 
   &-a {
-    position: absolute !important;
+    position: absolute;
   }
 
   &-f {
-    position: fixed !important;
+    position: fixed;
   }
 }
 

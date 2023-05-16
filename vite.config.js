@@ -17,6 +17,7 @@ export default defineConfig({
     // allin({ presets: [preset()] }),
     vue(),
     allin({
+      unit: 'px',
       // 配置规则
       ...cssRule()
     }),

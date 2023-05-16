@@ -63,6 +63,7 @@ export const cssRule = () => {
         poiter: 'cursor: pointer;',
         'box-s': 'box-sizing: border-box;',
         fr: 'display: flex;flex-direction: row',
+        frr: 'display: flex; flex-direction: row-reverse',
         fc: 'display: flex;flex-direction: column',
         fw: 'flex-wrap:wrap;',
         'f-ac': 'align-items: center;',
